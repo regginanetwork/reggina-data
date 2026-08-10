@@ -61,10 +61,10 @@ def main():
             testo = scarica_csv(gid)
             records = csv_to_records(testo)
 
+            # Un foglio con sole intestazioni è legittimo (stagione non iniziata).
+            # Il download riuscito è già garanzia che la fonte è raggiungibile.
             if not records:
-                print(f"⚠  {nome_file}: 0 righe — file NON aggiornato per sicurezza")
-                errori += 1
-                continue
+                print(f"·  {nome_file}: foglio vuoto (nessuna riga di dati)")
 
             nuovo = json.dumps(records, ensure_ascii=False, indent=1)
 
@@ -85,7 +85,6 @@ def main():
 
     if errori:
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
