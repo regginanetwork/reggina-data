@@ -18,6 +18,7 @@ FOGLI = {
     "rosa-anagrafica.json": "0",           # 👤 Rosa
     "calendario.json":      "1220754771",  # 📅 Calendario
     "minuti-gol.json":      "546570041",   # 🎯 DettaglioMatch
+    "classifica.json":      "436574245",   # 🏆 Classifica
 }
 
 URL = "https://docs.google.com/spreadsheets/d/{id}/export?format=csv&gid={gid}"
