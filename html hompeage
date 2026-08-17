@@ -23,6 +23,7 @@
 <p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Reggina Network è un progetto ideato da un gruppo di giovani tifosi della Reggina. L'idea è piuttosto semplice: condividere notizie, approfondimenti e dati su tutto quello che riguarda la squadra. Senza fare troppi giri di parole o usare "titoloni": ci interessa solo quello che serve davvero a capire cosa succede, dentro e fuori dal campo.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column -->
+
 <!-- wp:column {"style":{"spacing":{"blockGap":"1em"}}} -->
 <div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
 <p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <strong>canale WhatsApp</strong>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
@@ -165,9 +166,9 @@
 <p class="has-text-align-center has-foreground-color has-background-background-color has-text-color has-background has-link-color has-space-grotesk-font-family" style="border-style:none;border-width:0px;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:2px;margin-bottom:2px;padding-top:var(--wp--preset--spacing--50);padding-right:26px;padding-bottom:var(--wp--preset--spacing--50);padding-left:26px;font-size:32px;font-style:normal;font-weight:700;text-transform:uppercase">gli ultimi post</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:shortcode -->
+<!-- wp:html -->
 [ultimi_post quantita="12" link="/archivio"]
-<!-- /wp:shortcode -->
+<!-- /wp:html -->
 
 <!-- wp:social-links {"align":"center"} -->
 <ul class="wp-block-social-links aligncenter"><!-- wp:social-link {"url":"https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J","service":"whatsapp"} /-->
@@ -175,8 +176,9 @@
 <!-- wp:social-link {"url":"https://www.instagram.com/regginanetwork/","service":"instagram","label":""} /--></ul>
 <!-- /wp:social-links -->
 
-<!-- wp:template-part {"slug":"footer","theme":"bjork","tagName":"footer","className":"site-footer"} /--></div>
+<!-- wp:template-part {"slug":"footer","theme":"bjork","tagName":"footer","className":"site-footer"} /--></main>
 <!-- /wp:group --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
-<!-- /wp:group --><!-- /wp:group -->
+<!-- /wp:group --></div>
+<!-- /wp:group -->
