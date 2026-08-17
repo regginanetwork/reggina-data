@@ -1,0 +1,182 @@
+<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group"><!-- wp:group {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"layout":{"inherit":true,"type":"constrained"}} -->
+<div class="wp-block-group" style="margin-top:0;margin-bottom:0"><!-- wp:columns {"align":"wide","style":{"spacing":{"margin":{"bottom":"0px"}}}} -->
+<div class="wp-block-columns alignwide" style="margin-bottom:0px"><!-- wp:column {"width":"100%"} -->
+<div class="wp-block-column" style="flex-basis:100%"><!-- wp:template-part {"slug":"sidebar","theme":"bjork","area":"uncategorized"} /-->
+
+<!-- wp:group {"tagName":"main","layout":{"inherit":true,"type":"constrained"}} -->
+<main class="wp-block-group"><!-- wp:cover {"dimRatio":0,"overlayColor":"quaternary","isUserOverlayColor":true,"minHeight":61,"minHeightUnit":"px","isDark":false,"align":"wide","style":{"spacing":{"padding":{"top":"0vh","right":"0vh","bottom":"0vh","left":"0vh"}}}} -->
+<div class="wp-block-cover alignwide is-light" style="padding-top:0vh;padding-right:0vh;padding-bottom:0vh;padding-left:0vh;min-height:61px"><span aria-hidden="true" class="wp-block-cover__background has-quaternary-background-color has-background-dim-0 has-background-dim"></span><div class="wp-block-cover__inner-container"><!-- wp:group {"align":"wide","style":{"spacing":{"padding":{"bottom":"0vh","top":"0vh"},"blockGap":"2rem"}},"textColor":"foreground"} -->
+<div class="wp-block-group alignwide has-foreground-color has-text-color" style="padding-top:0vh;padding-bottom:0vh"><!-- wp:html -->
+<p>Ehi, ciao! Benvenuto. 👋</p>
+<!-- /wp:html --></div>
+<!-- /wp:group --></div></div>
+<!-- /wp:cover -->
+
+<!-- wp:spacer {"height":"0px"} -->
+<div style="height:0px" aria-hidden="true" class="wp-block-spacer"></div>
+<!-- /wp:spacer -->
+
+<!-- wp:columns {"align":"wide","style":{"spacing":{"padding":{"top":"0vh","bottom":"0vh"},"margin":{"top":"0px","bottom":"0px"}}}} -->
+<div class="wp-block-columns alignwide" style="margin-top:0px;margin-bottom:0px;padding-top:0vh;padding-bottom:0vh"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
+<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Reggina Network è un progetto ideato da un gruppo di giovani tifosi della Reggina. L'idea è piuttosto semplice: condividere notizie, approfondimenti e dati su tutto quello che riguarda la squadra. Senza fare troppi giri di parole o usare "titoloni": ci interessa solo quello che serve davvero a capire cosa succede, dentro e fuori dal campo.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column -->
+<!-- wp:column {"style":{"spacing":{"blockGap":"1em"}}} -->
+<div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
+<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <strong>canale WhatsApp</strong>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
+
+<!-- wp:group {"style":{"dimensions":{"minHeight":"0px"}},"layout":{"type":"default"}} -->
+<div class="wp-block-group" style="min-height:0px"><!-- wp:separator {"className":"is-style-wide","style":{"color":{"background":"#6a0000"}}} -->
+<hr class="wp-block-separator has-text-color has-alpha-channel-opacity has-background is-style-wide" style="background-color:#6a0000;color:#6a0000"/>
+<!-- /wp:separator --></div>
+<!-- /wp:group -->
+
+<!-- wp:html -->
+<style>
+/* ---------- Starter pack ---------- */
+.rn-sp { max-width: 1080px; margin: 46px auto 34px; font-family: 'Space Grotesk', sans-serif; }
+.rn-sp-h {
+  font-size: 1.9rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: #111; text-align: center; margin: 0 0 22px;
+}
+.rn-sp-g { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.rn-sp-i { text-decoration: none !important; color: inherit; display: block; }
+.rn-sp-i img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 3px; display: block; transition: transform .2s ease;
+}
+.rn-sp-i:hover img { transform: scale(1.03); }
+.rn-sp-c {
+  font-size: 0.85rem; font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: #111; text-align: center;
+  margin-top: 10px; line-height: 1.3; transition: color .15s;
+}
+.rn-sp-i:hover .rn-sp-c { color: #8B0000; text-decoration: underline; }
+
+/* ---------- DatAmaranto ---------- */
+.rn-dm {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  max-width: 1080px; margin: 0 auto;
+  background: #FBF8F6; border: 1px solid #EDE4E0; border-radius: 10px;
+  overflow: hidden; text-decoration: none !important; color: inherit;
+  transition: border-color .2s;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.rn-dm:hover { border-color: #8B0000; }
+.rn-dm-l { padding: 30px 32px; }
+.rn-dm-r { position: relative; overflow: hidden; min-height: 170px; }
+.rn-dm-r svg { position: absolute; right: 0; bottom: 0; width: 110%; height: 105%; opacity: .22; }
+.rn-dm-line { stroke-dasharray: 520; animation: rnDmDraw 7s ease-in-out infinite; }
+@keyframes rnDmDraw {
+  0%   { stroke-dashoffset: 520; opacity: 1; }
+  35%  { stroke-dashoffset: 0;   opacity: 1; }
+  80%  { stroke-dashoffset: 0;   opacity: 1; }
+  92%  { stroke-dashoffset: 0;   opacity: 0; }
+  93%  { stroke-dashoffset: 520; opacity: 0; }
+  100% { stroke-dashoffset: 520; opacity: 1; }
+}
+.rn-dm-dot { transform-origin: 270px 16px; animation: rnDmPop 7s ease-in-out infinite; }
+@keyframes rnDmPop {
+  0%, 30% { opacity: 0; transform: scale(0); }
+  38%     { opacity: 1; transform: scale(1); }
+  80%     { opacity: 1; transform: scale(1); }
+  88%     { opacity: 0; transform: scale(0); }
+  100%    { opacity: 0; transform: scale(0); }
+}
+.rn-dm-k {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: #8B0000;
+  background: rgba(139,0,0,.07); padding: 4px 10px; border-radius: 100px; margin-bottom: 14px;
+}
+.rn-dm-t { font-size: 32px; font-weight: 700; color: #1A0A0A; letter-spacing: -.03em; line-height: 1; margin-bottom: 10px; }
+.rn-dm-s { font-size: 14px; color: #7A6B68; line-height: 1.55; margin-bottom: 18px; }
+.rn-dm-c {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; color: #8B0000;
+  border-bottom: 2px solid #8B0000; padding-bottom: 3px;
+}
+.rn-dm-a { display: inline-block; animation: rnDmArr 1.4s ease-in-out infinite; }
+@keyframes rnDmArr { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+
+@media (max-width: 600px) {
+  .rn-sp-h { font-size: 1.4rem; }
+  .rn-sp-g { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .rn-dm { grid-template-columns: 1fr; }
+  .rn-dm-r { display: none; }
+  .rn-dm-l { padding: 22px 20px; }
+  .rn-dm-t { font-size: 28px; }
+  .rn-dm-s { font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rn-dm-line, .rn-dm-dot, .rn-dm-a { animation: none; }
+}
+</style>
+
+<div class="rn-sp">
+  <div class="rn-sp-h">RN Starter Pack</div>
+  <div class="rn-sp-g">
+
+    <a class="rn-sp-i" href="/classifica">
+      <img src="https://www.regginanetwork.it/wp-content/uploads/2026/03/classifica.png" alt="Classifica">
+      <div class="rn-sp-c">Classifica</div>
+    </a>
+
+    <a class="rn-sp-i" href="/calendario">
+      <img src="https://www.regginanetwork.it/wp-content/uploads/2026/03/calendario.png" alt="Calendario">
+      <div class="rn-sp-c">Calendario</div>
+    </a>
+
+    <a class="rn-sp-i" href="/dove-seguire-le-partite-della-reggina">
+      <img src="https://www.regginanetwork.it/wp-content/uploads/2026/03/tv.png" alt="Dove vedere le partite">
+      <div class="rn-sp-c">Dove vedere le partite</div>
+    </a>
+
+    <a class="rn-sp-i" href="/rosa">
+      <img src="https://www.regginanetwork.it/wp-content/uploads/2026/04/rosa.png" alt="Rosa">
+      <div class="rn-sp-c">Rosa</div>
+    </a>
+
+  </div>
+</div>
+
+<a class="rn-dm" href="https://regginanetwork.it/datamaranto">
+  <div class="rn-dm-l">
+    <span class="rn-dm-k">Dati e statistiche</span>
+    <div class="rn-dm-t">DatAmaranto</div>
+    <div class="rn-dm-s">Rosa, minutaggi, pagelle, gol e media punti. Tutti i numeri della Reggina in un unico posto.</div>
+    <span class="rn-dm-c">Esplora la dashboard <span class="rn-dm-a">&rarr;</span></span>
+  </div>
+  <div class="rn-dm-r">
+    <svg viewBox="0 0 300 120" preserveAspectRatio="none">
+      <polyline class="rn-dm-line" points="0,118 30,100 60,106 90,74 120,82 150,54 180,62 210,34 240,42 270,16 300,22"
+        fill="none" stroke="#8B0000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle class="rn-dm-dot" cx="270" cy="16" r="6" fill="#8B0000"/>
+    </svg>
+  </div>
+</a>
+<!-- /wp:html -->
+
+<!-- wp:paragraph {"className":"has-foreground-color has-background-background-color has-text-color has-background has-link-color has-space-grotesk-font-family","style":{"elements":{"link":{"color":{"text":"var:preset|color|foreground"}}},"border":{"radius":{"topLeft":"0px","topRight":"0px","bottomLeft":"0px","bottomRight":"0px"},"width":"0px","style":"none"},"typography":{"fontSize":"32px","fontStyle":"normal","fontWeight":"700","textTransform":"uppercase","textAlign":"center"},"spacing":{"margin":{"top":"2px","bottom":"2px"},"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|50","left":"26px","right":"26px"}}},"backgroundColor":"background","textColor":"foreground"} -->
+<p class="has-text-align-center has-foreground-color has-background-background-color has-text-color has-background has-link-color has-space-grotesk-font-family" style="border-style:none;border-width:0px;border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-left-radius:0px;border-bottom-right-radius:0px;margin-top:2px;margin-bottom:2px;padding-top:var(--wp--preset--spacing--50);padding-right:26px;padding-bottom:var(--wp--preset--spacing--50);padding-left:26px;font-size:32px;font-style:normal;font-weight:700;text-transform:uppercase">gli ultimi post</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:shortcode -->
+[ultimi_post quantita="12" link="/archivio"]
+<!-- /wp:shortcode -->
+
+<!-- wp:social-links {"align":"center"} -->
+<ul class="wp-block-social-links aligncenter"><!-- wp:social-link {"url":"https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J","service":"whatsapp"} /-->
+
+<!-- wp:social-link {"url":"https://www.instagram.com/regginanetwork/","service":"instagram","label":""} /--></ul>
+<!-- /wp:social-links -->
+
+<!-- wp:template-part {"slug":"footer","theme":"bjork","tagName":"footer","className":"site-footer"} /--></div>
+<!-- /wp:group --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:group --><!-- /wp:group -->
