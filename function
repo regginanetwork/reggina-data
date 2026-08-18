@@ -40,50 +40,6 @@ add_action( 'init', 'bjork_register_block_patterns' );
 
 
 /*	-----------------------------------------------------------------------------------------------
-	TYPEWRITER & FONTS
---------------------------------------------------------------------------------------------------- */
-
-function reggina_typewriter() {
-    if ( is_front_page() ) {
-        ?>
-        <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap');
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-        #greeting-cursor { display:inline-block; width:2px; height:0.8em; background:#111; margin-left:3px; vertical-align:middle; animation: blink 0.8s step-end infinite; }
-        #bungee-typed { font-family: 'Bungee Shade', cursive; font-weight: 400; }
-        </style>
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const greeting = "Ehi, ciao! Benvenuto. \uD83D\uDC4B";
-            let i = 0;
-            const greetingEl = document.getElementById('greeting-typed');
-            const greetingCur = document.getElementById('greeting-cursor');
-            function typeGreeting() {
-                if (!greetingEl) return;
-                if (i <= greeting.length) {
-                    greetingEl.textContent = greeting.slice(0, i);
-                    i++;
-                    setTimeout(typeGreeting, 100 + Math.random() * 60);
-                } else {
-                    if (greetingCur) greetingCur.style.display = 'none';
-                }
-            }
-            setTimeout(typeGreeting, 300);
-            const bungeeEl = document.getElementById('bungee-typed');
-            if (bungeeEl) { bungeeEl.textContent = 'Reggina Network.'; }
-        });
-        </script>
-        <?php
-    }
-}
-add_action( 'wp_head', 'reggina_typewriter' );
-
-function reggina_add_bungee_font() {
-    wp_enqueue_style( 'bungee-shade', 'https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap', array(), null );
-}
-add_action( 'wp_enqueue_scripts', 'reggina_add_bungee_font' );
-
-/*	-----------------------------------------------------------------------------------------------
 	GITHUB DATA BASE URL
 	Fonti attive: rosa-anagrafica.json (Rosa) · calendario.json (Calendario) · minuti-gol.json (DettaglioMatch)
 --------------------------------------------------------------------------------------------------- */
@@ -1613,7 +1569,15 @@ function reggina_header_compatto() {
         </svg>
         Canale
       </a>
-
+      <!-- Loghi social — visibili solo nell'header compatto mobile -->
+      <div class="rnh-social-min">
+        <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="#25D366" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.121 1.527 5.855L.057 23.882l6.196-1.624A11.935 11.935 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.369l-.36-.213-3.68.964.983-3.594-.234-.37A9.818 9.818 0 1112 21.818z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C13584" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="#C13584" stroke="none"/></svg>
+        </a>
+      </div>
       <button class="rnh-burger" id="rnh-burger" aria-label="Menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" aria-hidden="true">
           <path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>
@@ -1689,6 +1653,7 @@ function reggina_header_compatto() {
     .rnh.rnh-min .rnh-nav { font-size: 15px; gap: 26px; }
     .rnh.rnh-min .rnh-cta {
       grid-area: cta;
+      align-self: center;
       display: inline-flex; align-items: center; gap: 9px;
       background: #660000; border-radius: 999px; padding: 10px 19px;
       color: #fdfcfa !important; text-decoration: none !important;
@@ -1733,6 +1698,7 @@ function reggina_header_compatto() {
     .rnh-burger {
       display: none; background: none; border: none; cursor: pointer; padding: 6px;
     }
+    .rnh-social-min { display: none !important; }
     .rnh-burger svg { width: 24px; height: 24px; display: block; }
 
     /* ---------- MOBILE ---------- */
@@ -1762,8 +1728,8 @@ function reggina_header_compatto() {
       .rnh-drop-t svg { display: none; }
 
       .rnh.rnh-min {
-        grid-template-areas: "logo burger";
-        grid-template-columns: 1fr auto;
+        grid-template-areas: "logo social burger";
+        grid-template-columns: 1fr auto auto;
         justify-items: start; align-items: center;
         gap: 0; padding: 0 16px; height: 56px;
       }
@@ -1773,6 +1739,14 @@ function reggina_header_compatto() {
       .rnh.rnh-min .rnh-burger {
         position: static; grid-area: burger; justify-self: end;
       }
+      .rnh-social-min {
+        display: none;
+        grid-area: social;
+        align-items: center; gap: 12px; margin-right: 4px;
+      }
+      .rnh.rnh-min .rnh-social-min { display: flex !important; }
+      .rnh-social-min a { display: flex; align-items: center; text-decoration: none !important; }
+      .rnh-social-min svg { width: 20px; height: 20px; display: block; }
 
       /* Pannello */
       .rnh-panel {
