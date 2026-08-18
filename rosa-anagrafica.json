@@ -39,7 +39,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "1",
+  "numero maglia": "",
   "nome": "Antonio",
   "cognome": "Lagonigro",
   "ruolo": "portiere",
@@ -91,7 +91,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "2",
+  "numero maglia": "",
   "nome": "Giuseppe",
   "cognome": "Verduci",
   "ruolo": "difensore",
@@ -169,7 +169,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "3",
+  "numero maglia": "",
   "nome": "Rosario",
   "cognome": "Girasole",
   "ruolo": "difensore",
@@ -182,7 +182,7 @@
   "transfermarkt": "https://www.transfermarkt.it/rosario-girasole/profil/spieler/982068"
  },
  {
-  "numero maglia": "4",
+  "numero maglia": "",
   "nome": "Domenico",
   "cognome": "Girasole",
   "ruolo": "difensore",
@@ -208,7 +208,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "5",
+  "numero maglia": "",
   "nome": "Edoardo",
   "cognome": "De Mori",
   "ruolo": "difensore",
@@ -429,7 +429,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "16",
+  "numero maglia": "",
   "nome": "Stefano",
   "cognome": "Specker",
   "ruolo": "centrocampista",
@@ -442,7 +442,7 @@
   "transfermarkt": "https://www.transfermarkt.it/stefano-specker/profil/spieler/1112400"
  },
  {
-  "numero maglia": "15",
+  "numero maglia": "",
   "nome": "Andrea",
   "cognome": "Palmieri",
   "ruolo": "centrocampista",
@@ -520,7 +520,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "14",
+  "numero maglia": "",
   "nome": "Federico",
   "cognome": "Baggi",
   "ruolo": "centrocampista",
@@ -559,7 +559,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "6",
+  "numero maglia": "",
   "nome": "Mohamed",
   "cognome": "Laaribi",
   "ruolo": "centrocampista",
@@ -572,7 +572,7 @@
   "transfermarkt": "https://www.transfermarkt.it/mohamed-laaribi/profil/spieler/426034"
  },
  {
-  "numero maglia": "13",
+  "numero maglia": "",
   "nome": "Simone",
   "cognome": "Franchini",
   "ruolo": "centrocampista",
@@ -585,7 +585,7 @@
   "transfermarkt": "https://www.transfermarkt.it/simone-franchini/profil/spieler/341054"
  },
  {
-  "numero maglia": "12",
+  "numero maglia": "",
   "nome": "Antonio",
   "cognome": "Porcino",
   "ruolo": "centrocampista",
@@ -598,7 +598,7 @@
   "transfermarkt": "https://www.transfermarkt.it/antonio-porcino/profil/spieler/214537"
  },
  {
-  "numero maglia": "7",
+  "numero maglia": "",
   "nome": "Mady",
   "cognome": "Abonckelet",
   "ruolo": "centrocampista",
@@ -624,7 +624,7 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "8",
+  "numero maglia": "",
   "nome": "Riccardo",
   "cognome": "Rotulo",
   "ruolo": "centrocampista",
@@ -637,7 +637,7 @@
   "transfermarkt": "https://www.transfermarkt.it/riccardo-rotulo/profil/spieler/479713"
  },
  {
-  "numero maglia": "9",
+  "numero maglia": "",
   "nome": "Alberto",
   "cognome": "Acquadro",
   "ruolo": "centrocampista",
@@ -650,7 +650,7 @@
   "transfermarkt": "https://www.transfermarkt.it/alberto-acquadro/profil/spieler/307344"
  },
  {
-  "numero maglia": "10",
+  "numero maglia": "",
   "nome": "Andrea",
   "cognome": "Di Grazia",
   "ruolo": "attaccante",
@@ -663,7 +663,7 @@
   "transfermarkt": "https://www.transfermarkt.it/andrea-di-grazia/profil/spieler/287265"
  },
  {
-  "numero maglia": "11",
+  "numero maglia": "",
   "nome": "Michele",
   "cognome": "Guida",
   "ruolo": "attaccante",
