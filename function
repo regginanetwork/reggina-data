@@ -307,8 +307,8 @@ function reggina_dashboard_shortcode() {
     .rnd-pcard-num{font-size:28px;font-weight:700;color:#8B0000;line-height:1;flex-shrink:0;min-width:36px}
     .rnd-pcard-sep{width:1px;align-self:stretch;background:#f0f0f0;flex-shrink:0}
     .rnd-pcard-names{flex:1;min-width:0}
-    .rnd-pcard-fn{font-size:13px;color:#999;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .rnd-pcard-sn{font-size:19px;font-weight:700;color:#111;line-height:1.15;word-break:break-word;margin-bottom:6px}
+    .rnd-pcard-fn{font-size:14px;color:#999;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .rnd-pcard-sn{font-size:21px;font-weight:700;color:#111;line-height:1.15;word-break:break-word;margin-bottom:6px}
     .rnd-rb{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;padding:2px 6px;border-radius:3px;display:inline-block}
     .rnd-rp{background:#E6F1FB;color:#0C447C}.rnd-rd{background:#EAF3DE;color:#27500A}
     .rnd-rc{background:#FAEEDA;color:#633806}.rnd-ra{background:#FCEBEB;color:#791F1F}
@@ -373,7 +373,7 @@ function reggina_dashboard_shortcode() {
     .rnd-empty{background:#FAFAFA;border:0.5px solid #eee;border-radius:10px;padding:32px 24px;text-align:center}
     .rnd-empty-t{font-size:15px;font-weight:600;color:#333;margin-bottom:8px}
     .rnd-empty-b{font-size:13.5px;color:#888;line-height:1.6;max-width:420px;margin:0 auto}
-    .rnd-disclaimer{font-size:11px;color:#B0A9A4;line-height:1.6;margin-bottom:18px;font-style:italic}
+    .rnd-disclaimer{font-size:11px;color:#B0A9A4;line-height:1.6;margin:22px 0 0;padding-top:14px;border-top:0.5px solid #F0ECE9;font-style:italic}
     .rnd-disclaimer a{color:#B0A9A4;text-decoration:underline}
     .rnd-disclaimer a:hover{color:#8B0000}
 
@@ -383,28 +383,30 @@ function reggina_dashboard_shortcode() {
     .dv-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
     .dv-tbl{border-collapse:separate;border-spacing:0;width:100%}
     .dv-tbl th,.dv-tbl td{padding:0}
-    .dv-nm{position:sticky;left:0;z-index:2;background:#fff;padding:10px 12px !important;
-      border-right:1px solid #F0ECE9;min-width:132px;text-align:left}
-    .pg-tbl .dv-nm{min-width:90px;width:90px}
+    .dv-nm{position:sticky;left:0;z-index:2;background:#fff;padding:10px 10px !important;
+      border-right:1px solid #F0ECE9;min-width:110px;width:110px;text-align:left}
+    .pg-tbl .dv-nm{min-width:104px;width:104px}
     .dv-tbl thead .dv-nm{background:#FAFAF9}
-    .dv-nm-s{font-size:16px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .dv-nm-r{font-size:10px;font-weight:500;color:#B0A9A4;margin-top:2px}
+    .dv-nm-s{font-size:17.5px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dv-nm-r{font-size:12px;font-weight:500;color:#B0A9A4;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .dv-hd{background:#FAFAF9;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-      color:#B0A9A4;padding:9px 6px !important;text-align:center;white-space:nowrap}
+      color:#B0A9A4;padding:9px 4px !important;text-align:center;white-space:nowrap}
     .dv-tbl tbody tr{border-top:1px solid #F5F2F0}
-    .hm-c{width:30px;height:30px;text-align:center;font-size:10px;font-weight:600;
-      color:#fff;border-radius:4px;line-height:30px}
-    .hm-td{padding:2px !important;text-align:center}
-    .hm-tot{padding:10px 12px !important;text-align:right;min-width:74px;background:#FAFAF9;
-      position:sticky;left:132px;z-index:2;border-right:1px solid #F0ECE9}
-    .hm-tot-v{font-size:15px;font-weight:700;color:#8B0000;line-height:1}
-    .hm-tot-l{font-size:9px;color:#B0A9A4;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-    .dv-tbl thead .hm-tot{left:132px}
-    .pg-med{padding:10px 12px !important;text-align:center;min-width:62px;background:#FAFAF9;
-      position:sticky;left:90px;z-index:2;border-right:1px solid #F0ECE9}
-    .pg-med-v{font-size:17px;font-weight:700;line-height:1}
-    .pg-med-l{font-size:9px;color:#B0A9A4;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-    .pg-tbl thead .pg-med{left:90px}
+    .hm-c{width:26px;height:26px;margin:0 auto;text-align:center;font-size:10px;font-weight:600;
+      color:#fff;border-radius:4px;line-height:26px}
+    .hm-td{padding:2px !important;text-align:center;width:30px}
+    .dv-fill{width:100%;background:#fff}
+    .dv-tbl thead .dv-fill{background:#FAFAF9}
+    .hm-tot{padding:10px 8px !important;text-align:right;min-width:56px;width:56px;background:#FAFAF9;
+      position:sticky;left:110px;z-index:2;border-right:1px solid #F0ECE9}
+    .hm-tot-v{font-size:15px;font-weight:700;color:#8B0000;line-height:1;white-space:nowrap}
+    .hm-tot-l{font-size:9px;color:#B0A9A4;letter-spacing:.03em;text-transform:uppercase;margin-top:2px;white-space:nowrap}
+    .dv-tbl thead .hm-tot{left:110px}
+    .pg-med{padding:10px 8px !important;text-align:center;min-width:60px;width:60px;background:#FAFAF9;
+      position:sticky;left:104px;z-index:2;border-right:1px solid #F0ECE9}
+    .pg-med-v{font-size:17px;font-weight:700;line-height:1;white-space:nowrap}
+    .pg-med-l{font-size:9px;color:#B0A9A4;letter-spacing:.03em;text-transform:uppercase;margin-top:2px;white-space:nowrap}
+    .pg-tbl thead .pg-med{left:104px}
     .pg-bars{padding:8px 12px !important}
     .pg-v-top{font-size:9px;font-weight:700;color:#7A6B68;text-align:center;margin-bottom:2px;line-height:1;height:12px}
     .pg-bar-wrap{display:flex;flex-direction:column;align-items:center;width:20px}
@@ -412,8 +414,7 @@ function reggina_dashboard_shortcode() {
     .pg-b-e{background:repeating-linear-gradient(135deg,#F4F2F0,#F4F2F0 3px,transparent 3px,transparent 6px);
       height:4px !important;border-radius:2px}
     .pg-lbl-row{display:flex;gap:3px;margin-top:3px}
-    .pg-lbl{font-size:8px;font-weight:600;color:#B0A9A4;text-align:center;width:20px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .pg-lbl.last{color:#8B0000;font-weight:700;font-size:7px}
+    .pg-lbl{font-size:8px;font-weight:600;color:#B0A9A4;text-align:center;width:20px;line-height:1;white-space:nowrap}
 
     @media(max-width:600px){
       .rnd-grid{grid-template-columns:1fr}
@@ -424,11 +425,13 @@ function reggina_dashboard_shortcode() {
       .rnd-card-icon{width:11px;height:15px}
       .rnd-card-num{font-size:16px}
       .rnd-c2{grid-template-columns:1fr}
-      .dv-nm{min-width:104px}
-      .dv-nm-s{font-size:14px}
-      .hm-tot{left:104px}
-      .dv-tbl thead .hm-tot{left:104px}
-      .hm-c{width:26px;height:26px;line-height:26px;font-size:9px}
+      .dv-nm{min-width:98px;width:98px;padding:10px 8px !important}
+      .dv-nm-s{font-size:16px}
+      .dv-nm-r{font-size:11px}
+      .hm-tot{left:98px}
+      .dv-tbl thead .hm-tot{left:98px}
+      .hm-c{width:24px;height:24px;line-height:24px;font-size:9px}
+      .hm-td{width:28px}
     }
     </style>
 
@@ -440,7 +443,6 @@ function reggina_dashboard_shortcode() {
         <button class="rnd-tab" onclick="rndView('s',this)">Squadra</button>
       </div>
       <div id="rnd-notice"></div>
-      <p class="rnd-disclaimer">I dati si riferiscono solo al campionato e non includono la Coppa Italia. Sono raccolti da Reggina Network partita dopo partita: per segnalare un errore scrivi a <a href="mailto:regginanetwork@gmail.com">regginanetwork@gmail.com</a> o a <a href="https://instagram.com/regginanetwork" target="_blank" rel="noopener">@regginanetwork</a> su Instagram.</p>
 
       <!-- GIOCATORI -->
       <div id="rnd-vg">
@@ -468,6 +470,8 @@ function reggina_dashboard_shortcode() {
 
       <!-- SQUADRA -->
       <div id="rnd-vs" hidden><div class="rnd-loading">Caricamento...</div></div>
+
+      <p class="rnd-disclaimer">I dati si riferiscono solo al campionato e non includono la Coppa Italia. Sono raccolti da Reggina Network partita dopo partita: per segnalare un errore scrivi a <a href="mailto:regginanetwork@gmail.com">regginanetwork@gmail.com</a> o a <a href="https://instagram.com/regginanetwork" target="_blank" rel="noopener">@regginanetwork</a> su Instagram.</p>
     </div>
 
     <script>
@@ -491,13 +495,20 @@ function reggina_dashboard_shortcode() {
         fetch(BASE+'minuti-gol.json?t='+t).then(r=>r.json()),
       ]).then(([rosa,cal,det])=>{
 
-        /* ---------- 1. ANAGRAFICA ---------- */
-        const P={};
+        /* ---------- 1. ANAGRAFICA ----------
+           Il cognome da solo non basta: in rosa possono esserci due omonimi
+           (es. due Girasole). La chiave e' cognome + numero di maglia. */
+        const P={}, perCognome={};
+        const chiave=(cog,maglia)=>cog.toLowerCase()+'#'+String(maglia||'').trim();
+
         rosa.forEach(r=>{
           const v=(r['in rosa']||'').toLowerCase();
           if(v!=='sì'&&v!=='si')return;
           const cog=(r['cognome']||'').trim(); if(!cog)return;
-          P[cog]={cognome:cog,nome:(r['nome']||'').trim(),maglia:r['numero maglia']||'',
+          const mag=String(r['numero maglia']||'').trim();
+          const k=chiave(cog,mag);
+          (perCognome[cog.toLowerCase()]=perCognome[cog.toLowerCase()]||[]).push(k);
+          P[k]={cognome:cog,nome:(r['nome']||'').trim(),maglia:r['numero maglia']||'',
             ruolo:(r['ruolo']||'').toLowerCase(),underover:r['under/over']||'',
             nascita:r['data di nascita']||'',eta:r['età']||'',
             contratto:r['tipologia contratto']||'',scadenza:r['scadenza contratto']||'',
@@ -526,13 +537,39 @@ function reggina_dashboard_shortcode() {
           {label:"86'+",min:86,max:200,fatti:0,subiti:0},
         ];
 
+        /* Il numero di maglia nel foglio DettaglioMatch rende esatto l'abbinamento
+           anche con gli omonimi. L'intestazione della colonna puo' essere scritta
+           in modi diversi, quindi cerchiamo la prima chiave che contiene "maglia".
+           Senza numero si puo' abbinare solo quando il cognome e' unico in rosa. */
+        const omonimi={};
+        function magliaDi(r){
+          const k=Object.keys(r).find(x=>x.toLowerCase().indexOf('maglia')>-1);
+          return k?String(r[k]||'').trim():'';
+        }
+        function trovaGiocatore(cog,mag){
+          const lista=perCognome[cog.toLowerCase()];
+          if(!lista||!lista.length)return null;
+          if(mag&&P[chiave(cog,mag)])return P[chiave(cog,mag)];
+          if(lista.length===1)return P[lista[0]];
+          omonimi[cog]=1;
+          return null;
+        }
+
         det.filter(r=>(r['competizione']||'').toLowerCase()===COMP).forEach(r=>{
           const cog=(r['nome']||'').trim();
+          const magDet=magliaDi(r);
           const turno=parseInt(r['turno']);
-          const ruolo=(r['ruolo']||'').toLowerCase();
           const minuti=num(r['minuti giocati']);
           const golRaw=String(r['gol']||'').trim();
-          const isPortiere=ruolo==='portiere';
+
+          /* Il ruolo nel foglio DettaglioMatch puo' essere scritto in modi diversi
+             (POR, Portiere, P...). Quando il giocatore e' in rosa usiamo il ruolo
+             dell'anagrafica, che e' l'unico su cui possiamo contare. */
+          const p=trovaGiocatore(cog,magDet);
+          const ruoloDet=(r['ruolo']||'').toLowerCase().trim();
+          const isPortiere = p
+            ? p.ruolo==='portiere'
+            : (ruoloDet==='portiere'||ruoloDet==='por'||ruoloDet==='p');
 
           const minGol=String(r['min. gol']||'');
           if(minGol){
@@ -542,7 +579,7 @@ function reggina_dashboard_shortcode() {
               });
           }
 
-          const p=P[cog]; if(!p)return;
+          if(!p)return;
 
           if(num(r['titolare']))p.titolare++;
           if(num(r['subentrato']))p.subentrato++;
@@ -573,6 +610,11 @@ function reggina_dashboard_shortcode() {
         });
 
         allP=Object.values(P);
+        allP.forEach((p,i)=>{p.id=i;});
+        Object.keys(omonimi).forEach(cog=>{
+          console.warn('DatAmaranto: "'+cog+'" e\' presente in rosa piu\' di una volta. '+
+            'Aggiungi la colonna "numero maglia" nel foglio DettaglioMatch per attribuire i dati.');
+        });
         if(!partite.length){
           document.getElementById('rnd-notice').innerHTML=
             '<div class="rnd-notice"><div class="rnd-notice-t">Stagione non ancora iniziata</div>'+
@@ -594,7 +636,7 @@ function reggina_dashboard_shortcode() {
           const ip=p.ruolo==='portiere';
           const s2=ip?{v:p.golSub,l:'Gol sub',c:'r'}:{v:p.gol,l:'Gol',c:p.gol>0?'r':''};
           const s3=ip?{v:p.cs,l:'Clean sh.',c:'g'}:{v:p.assist,l:'Assist',c:''};
-          return '<div class="rnd-pcard" onclick="rndOpen(\''+p.cognome.replace(/'/g,"\\'")+'\')" data-ruolo="'+p.ruolo+'" data-nome="'+(p.cognome+' '+p.nome).toLowerCase()+'">'+
+          return '<div class="rnd-pcard" onclick="rndOpen('+p.id+')" data-ruolo="'+p.ruolo+'" data-nome="'+(p.cognome+' '+p.nome).toLowerCase()+'">'+
             '<div class="rnd-pcard-header"><div class="rnd-pcard-num">'+(p.maglia||'—')+'</div><div class="rnd-pcard-sep"></div>'+
             '<div class="rnd-pcard-names"><div class="rnd-pcard-fn">'+p.nome+'</div><div class="rnd-pcard-sn">'+p.cognome+'</div>'+
             '<span class="rnd-rb '+(RC[p.ruolo]||'rnd-rd')+'">'+(RL[p.ruolo]||p.ruolo)+'</span></div></div>'+
@@ -607,8 +649,8 @@ function reggina_dashboard_shortcode() {
       }
 
       /* ---------- SCHEDA GIOCATORE ---------- */
-      window.rndOpen=function(cognome){
-        const p=allP.find(x=>x.cognome===cognome); if(!p)return;
+      window.rndOpen=function(id){
+        const p=allP[id]; if(!p)return;
         const ip=p.ruolo==='portiere';
         const gi=Object.entries(p.giornate).sort((a,b)=>+a[0]-+b[0]);
 
@@ -705,6 +747,7 @@ function reggina_dashboard_shortcode() {
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="hm-tot dv-hd">Minuti</th>';
         giornate.forEach(g=>{ h+='<th class="dv-hd">'+g+'</th>'; });
+        h+='<th class="dv-hd dv-fill"></th>';
         h+='</tr></thead><tbody>';
 
         sorted.forEach(p=>{
@@ -717,6 +760,7 @@ function reggina_dashboard_shortcode() {
             const m=e[1].min;
             h+='<td class="hm-td"><div class="hm-c" style="background:'+colMin(m)+'">'+(m||'')+'</div></td>';
           });
+          h+='<td class="dv-fill"></td>';
           h+='</tr>';
         });
         h+='</tbody></table></div></div>';
@@ -735,11 +779,6 @@ function reggina_dashboard_shortcode() {
           document.getElementById('rnd-vpag').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Stagione non ancora iniziata</div><div class="rnd-empty-b">Le pagelle compariranno dopo la prima giornata.</div></div>';
           return;
         }
-
-        // Ultima giornata: avversario dalla lista partite
-        const ultimaPartita=partite[partite.length-1];
-        const ultimaTurno=parseInt(ultimaPartita['turno']);
-        const ultimoAvv=(ultimaPartita['avversario']||'').trim();
 
         const conVoto=allP.filter(p=>p.mediaVoto!==null).sort((a,b)=>b.mediaVoto-a.mediaVoto);
         const senzaVoto=allP.filter(p=>p.mediaVoto===null);
@@ -769,8 +808,7 @@ function reggina_dashboard_shortcode() {
           // Riga barre con voto sopra
           h+='<div style="display:flex;gap:3px;align-items:flex-end">';
           gi.forEach(e=>{
-            const turno=parseInt(e[0]), g=e[1];
-            const isUltima=(turno===ultimaTurno);
+            const g=e[1];
             h+='<div class="pg-bar-wrap">';
             h+='<div class="pg-v-top">'+(g.voto!==null?String(g.voto).replace('.',','):'')+'</div>';
             if(g.voto===null){
@@ -786,13 +824,7 @@ function reggina_dashboard_shortcode() {
           // Etichette giornata sotto
           h+='<div class="pg-lbl-row">';
           gi.forEach(e=>{
-            const turno=parseInt(e[0]);
-            const isUltima=(turno===ultimaTurno);
-            if(isUltima){
-              h+='<div class="pg-lbl last" title="vs '+ultimoAvv+'">'+ultimoAvv+'</div>';
-            } else {
-              h+='<div class="pg-lbl">g'+turno+'</div>';
-            }
+            h+='<div class="pg-lbl">g'+parseInt(e[0])+'</div>';
           });
           h+='</div>';
 
