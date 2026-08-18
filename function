@@ -150,9 +150,6 @@ function reggina_calendario_script() {
         const LOGHI = <?php echo $loghi_json; ?>;
        const JSON_URL = '<?php echo rest_url('rn/v1/data/calendario'); ?>?t=' + Date.now();
 
-        const oggi = new Date();
-        oggi.setHours(0, 0, 0, 0);
-
         const mesi = { 'gennaio':0,'febbraio':1,'marzo':2,'aprile':3,'maggio':4,'giugno':5,'luglio':6,'agosto':7,'settembre':8,'ottobre':9,'novembre':10,'dicembre':11 };
         const mesiBrevi = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
 
@@ -206,8 +203,9 @@ function reggina_calendario_script() {
                     if (!avversario || avversario.length < 2) return;
 
                     const dataPartita = parseData(dataStr);
-                    const passata = dataPartita ? dataPartita <= oggi : false;
-                    const hasResult = passata && gf !== '' && gs !== '';
+                    // Il punteggio compare quando c'e', a prescindere dalla data:
+                    // cosi' si vedono anche i risultati inseriti in anticipo.
+                    const hasResult = gf !== '' && gs !== '';
                     const isHome = ha.toLowerCase().includes('casa');
 
                     const sectionLabel = comp.charAt(0).toUpperCase() + comp.slice(1);
