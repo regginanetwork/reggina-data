@@ -1342,6 +1342,21 @@ function reggina_css_utility() {
     <style>
     .rn-justify,
     .rn-justify.has-text-align-left { text-align: justify; hyphens: auto; }
+
+    /* Sottotitolo sotto i titoli di pagina (es. sotto "DatAmaranto") */
+    p.rn-subtitle {
+        max-width: 640px !important;
+        margin: -42px auto 22px !important;
+        text-align: center !important;
+        font-family: 'Space Grotesk', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        color: #8E8E96 !important;
+        line-height: 1.5 !important;
+    }
+    @media (max-width: 600px) {
+        p.rn-subtitle { font-size: 12px !important; padding: 0 16px; }
+    }
     </style>
     <?php
 }
