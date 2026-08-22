@@ -296,6 +296,9 @@ function reggina_dashboard_shortcode() {
     .rnd-search:focus{border-color:#aaa}
     .rnd-filters{display:flex;gap:6px;flex-wrap:wrap}
     .rnd-filter{padding:7px 16px;border:0.5px solid #ddd;border-radius:20px;font-size:14px;cursor:pointer;background:#fff;color:#666;font-family:'Space Grotesk',sans-serif}
+    .rnd-comp-row{display:inline-flex;background:#EDEAE7;border-radius:100px;padding:3px;gap:2px;margin:0 0 16px}
+    .rnd-comp{border:none;background:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;color:#8E8E96;padding:8px 18px;border-radius:100px;transition:all .18s}
+    .rnd-comp.active{background:#fff;color:#8B0000;box-shadow:0 1px 3px rgba(0,0,0,.09)}
     .rnd-filter.active{background:#8B0000;border-color:#8B0000;color:#fff}
     .rnd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
     .rnd-pcard{background:#fff;border:0.5px solid #eee;border-radius:10px;padding:12px;cursor:pointer;transition:all 0.15s}
@@ -440,6 +443,10 @@ function reggina_dashboard_shortcode() {
         <button class="rnd-tab" onclick="rndView('pag',this)">Pagelle</button>
         <button class="rnd-tab" onclick="rndView('s',this)">Squadra</button>
       </div>
+      <div class="rnd-comp-row" id="rnd-comp-row">
+        <button class="rnd-comp active" onclick="rndToggleComp('campionato',this)">Campionato</button>
+        <button class="rnd-comp" onclick="rndToggleComp('coppa italia',this)">Coppa Italia</button>
+      </div>
       <div id="rnd-notice"></div>
 
       <!-- GIOCATORI -->
@@ -468,23 +475,43 @@ function reggina_dashboard_shortcode() {
 
       <!-- SQUADRA -->
       <div id="rnd-vs" hidden><div class="rnd-loading">Caricamento...</div></div>
-
-      <p class="rnd-disclaimer">I dati si riferiscono solo al campionato e non includono la Coppa Italia. Sono raccolti da Reggina Network partita dopo partita: per segnalare un errore scrivi a <a href="mailto:regginanetwork@gmail.com">regginanetwork@gmail.com</a> o a <a href="https://instagram.com/regginanetwork" target="_blank" rel="noopener">@regginanetwork</a> su Instagram.</p>
     </div>
 
     <script>
     (function(){
       const BASE = '<?php echo RN_GITHUB_BASE; ?>';
-      const COMP = 'campionato';
       const RL={portiere:'Portiere',difensore:'Difensore',centrocampista:'Centrocampista',attaccante:'Attaccante'};
       const RC={portiere:'rnd-rp',difensore:'rnd-rd',centrocampista:'rnd-rc',attaccante:'rnd-ra'};
       const RO=['portiere','difensore','centrocampista','attaccante'];
-      let allP=[],partite=[],fasce=[],curF='tutti',curS='',squadraDone=false,minDone=false,pagDone=false;
+      const COMP_LABEL={campionato:'campionato','coppa italia':'Coppa Italia'};
+
+      let rosaData=[], calData=[], detData=[];
+      let selezionate=new Set(['campionato']);
+      let currentView='g';
+      let allP=[], matches=[], fasce=[], curF='tutti', curS='', minDone=false, pagDone=false, squadraDone=false;
 
       const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
       const num=v=>{const n=parseInt(v);return isNaN(n)?0:n;};
       const dec=v=>{const n=parseFloat(String(v||'').replace(',','.'));return isNaN(n)?null:n;};
       const spett=v=>{const s=String(v||'').replace(/[^0-9]/g,'');return s?parseInt(s):null;};
+
+      /* Campionato: g1, g2, g3... Coppa Italia: sempre "CI", senza numero. */
+      function labelPartita(comp,num,prefisso){
+        return comp==='coppa italia' ? 'CI' : (prefisso+num);
+      }
+
+      /* Le date arrivano come "domenica 30 agosto 2026": servono per ordinare
+         cronologicamente le partite di competizioni diverse, dato che il numero
+         di turno non e' confrontabile fra campionato (numerico) e Coppa Italia
+         (testuale, es. "I turno"). */
+      const MESI_IT={gennaio:0,febbraio:1,marzo:2,aprile:3,maggio:4,giugno:5,luglio:6,agosto:7,settembre:8,ottobre:9,novembre:10,dicembre:11};
+      function parseDataIt(str){
+        const parti=String(str||'').toLowerCase().trim().split(/\s+/);
+        if(parti.length<4)return null;
+        const giorno=parseInt(parti[1]), mese=MESI_IT[parti[2]], anno=parseInt(parti[3]);
+        if(isNaN(giorno)||mese===undefined||isNaN(anno))return null;
+        return new Date(anno,mese,giorno);
+      }
 
       const t=Date.now();
       Promise.all([
@@ -492,14 +519,22 @@ function reggina_dashboard_shortcode() {
         fetch(BASE+'calendario.json?t='+t).then(r=>r.json()),
         fetch(BASE+'minuti-gol.json?t='+t).then(r=>r.json()),
       ]).then(([rosa,cal,det])=>{
+        rosaData=rosa; calData=cal; detData=det;
+        ricalcola();
+      }).catch(e=>{
+        document.getElementById('rnd-grid').innerHTML='<div class="rnd-loading">Errore nel caricamento dei dati.</div>';
+        console.error('DatAmaranto:',e);
+      });
 
+      /* ---------- RICALCOLO IN BASE ALLE COMPETIZIONI SELEZIONATE ---------- */
+      function ricalcola(){
         /* ---------- 1. ANAGRAFICA ----------
            Il cognome da solo non basta: in rosa possono esserci due omonimi
            (es. due Girasole). La chiave e' cognome + numero di maglia. */
         const P={}, perCognome={};
         const chiave=(cog,maglia)=>cog.toLowerCase()+'#'+String(maglia||'').trim();
 
-        rosa.forEach(r=>{
+        rosaData.forEach(r=>{
           const v=(r['in rosa']||'').toLowerCase();
           if(v!=='sì'&&v!=='si')return;
           const cog=(r['cognome']||'').trim(); if(!cog)return;
@@ -515,18 +550,39 @@ function reggina_dashboard_shortcode() {
             amm:0,esp:0,golSub:0,cs:0,giornate:{},mediaVoto:null};
         });
 
-        /* ---------- 2. CALENDARIO ---------- */
-        partite=cal
-          .filter(r=>(r['competizione']||'').toLowerCase()===COMP)
-          .filter(r=>!isNaN(parseInt(r['turno'])))
+        /* ---------- 2. PARTITE (calendario), filtrate per competizione selezionata
+           e ordinate per data reale — non per turno, che non e' confrontabile fra
+           campionato (numerico) e Coppa Italia (testuale, es. "I turno"). ---------- */
+        matches=calData
+          .filter(r=>selezionate.has((r['competizione']||'').toLowerCase().trim()))
           .filter(r=>(r['V/S/P']||'')!=='')
-          .sort((a,b)=>parseInt(a['turno'])-parseInt(b['turno']));
+          .map(r=>{
+            const comp=(r['competizione']||'').toLowerCase().trim();
+            const turno=String(r['turno']||'').trim();
+            return Object.assign({}, r, {
+              _comp:comp,
+              _key:comp+'|'+turno.toLowerCase(),
+              _data:parseDataIt(r['data'])
+            });
+          })
+          .sort((a,b)=>{
+            const da=a._data?a._data.getTime():0, db=b._data?b._data.getTime():0;
+            return da-db;
+          });
+        matches.forEach((m,i)=>{ m._idx=i+1; });
 
-        const giornate=partite.map(r=>parseInt(r['turno']));
+        // Numerazione g1,g2... solo fra le partite di campionato: la Coppa
+        // Italia viene sempre segnalata semplicemente come "CI", senza numero.
+        let contCampionato=0;
+        matches.forEach(m=>{
+          if(m._comp==='campionato'){ contCampionato++; m._numCampionato=contCampionato; }
+        });
+
+        Object.values(P).forEach(p=>{
+          matches.forEach(m=>{ p.giornate[m._key]={min:0,voto:null,idx:m._idx,comp:m._comp,num:m._numCampionato}; });
+        });
 
         /* ---------- 3. DETTAGLIO MATCH ---------- */
-        Object.values(P).forEach(p=>{giornate.forEach(g=>{p.giornate[g]={min:0,voto:null};});});
-
         fasce=[
           {label:"0–25'",min:0,max:25,fatti:0,subiti:0},
           {label:"26–45'",min:26,max:45,fatti:0,subiti:0},
@@ -553,51 +609,56 @@ function reggina_dashboard_shortcode() {
           return null;
         }
 
-        det.filter(r=>(r['competizione']||'').toLowerCase()===COMP).forEach(r=>{
-          const cog=(r['nome']||'').trim();
-          const magDet=magliaDi(r);
-          const turno=parseInt(r['turno']);
-          const minuti=num(r['minuti giocati']);
-          const golRaw=String(r['gol']||'').trim();
+        detData
+          .filter(r=>selezionate.has((r['competizione']||'').toLowerCase().trim()))
+          .forEach(r=>{
+            const cog=(r['nome']||'').trim();
+            const magDet=magliaDi(r);
+            const comp=(r['competizione']||'').toLowerCase().trim();
+            const turno=String(r['turno']||'').trim();
+            const key=comp+'|'+turno.toLowerCase();
+            const minuti=num(r['minuti giocati']);
+            const golRaw=String(r['gol']||'').trim();
 
-          /* Il ruolo nel foglio DettaglioMatch puo' essere scritto in modi diversi
-             (POR, Portiere, P...). Quando il giocatore e' in rosa usiamo il ruolo
-             dell'anagrafica, che e' l'unico su cui possiamo contare. */
-          const p=trovaGiocatore(cog,magDet);
-          const ruoloDet=(r['ruolo']||'').toLowerCase().trim();
-          const isPortiere = p
-            ? p.ruolo==='portiere'
-            : (ruoloDet==='portiere'||ruoloDet==='por'||ruoloDet==='p');
+            /* Il ruolo nel foglio DettaglioMatch puo' essere scritto in modi diversi
+               (POR, Portiere, P...). Quando il giocatore e' in rosa usiamo il ruolo
+               dell'anagrafica, che e' l'unico su cui possiamo contare. */
+            const p=trovaGiocatore(cog,magDet);
+            const ruoloDet=(r['ruolo']||'').toLowerCase().trim();
+            const isPortiere = p
+              ? p.ruolo==='portiere'
+              : (ruoloDet==='portiere'||ruoloDet==='por'||ruoloDet==='p');
 
-          const minGol=String(r['min. gol']||'');
-          if(minGol){
-            minGol.split(';').map(m=>parseInt(String(m).trim().replace(/\+\d+/,'')))
-              .filter(m=>!isNaN(m)&&m>0).forEach(m=>{
-                fasce.forEach(f=>{if(m>=f.min&&m<=f.max){isPortiere?f.subiti++:f.fatti++;}});
-              });
-          }
+            const minGol=String(r['min. gol']||'');
+            if(minGol){
+              minGol.split(';').map(m=>parseInt(String(m).trim().replace(/\+\d+/,'')))
+                .filter(m=>!isNaN(m)&&m>0).forEach(m=>{
+                  fasce.forEach(f=>{if(m>=f.min&&m<=f.max){isPortiere?f.subiti++:f.fatti++;}});
+                });
+            }
 
-          if(!p)return;
+            if(!p)return;
 
-          if(num(r['titolare']))p.titolare++;
-          if(num(r['subentrato']))p.subentrato++;
-          if(minuti>0)p.presenze++;
-          p.minuti+=minuti;
-          if(num(r['ammonizione']))p.amm++;
-          if(num(r['espulsione']))p.esp++;
-          p.assist+=num(r['assist']);
+            if(num(r['titolare']))p.titolare++;
+            if(num(r['subentrato']))p.subentrato++;
+            if(minuti>0)p.presenze++;
+            p.minuti+=minuti;
+            if(num(r['ammonizione']))p.amm++;
+            if(num(r['espulsione']))p.esp++;
+            p.assist+=num(r['assist']);
 
-          if(isPortiere){
-            if(golRaw.toUpperCase()==='CS')p.cs++;
-            else p.golSub+=num(golRaw);
-          } else {
-            p.gol+=num(golRaw);
-          }
+            if(isPortiere){
+              if(golRaw.toUpperCase()==='CS')p.cs++;
+              else p.golSub+=num(golRaw);
+            } else {
+              p.gol+=num(golRaw);
+            }
 
-          if(turno&&p.giornate[turno]!==undefined){
-            p.giornate[turno]={min:minuti,voto:dec(r['voto'])};
-          }
-        });
+            if(p.giornate[key]!==undefined){
+              const prec=p.giornate[key];
+              p.giornate[key]={min:minuti,voto:dec(r['voto']),idx:prec.idx,comp:prec.comp,num:prec.num};
+            }
+          });
 
         Object.values(P).forEach(p=>{
           const e=Object.values(p.giornate).filter(g=>g.voto!==null&&g.min>0);
@@ -613,17 +674,29 @@ function reggina_dashboard_shortcode() {
           console.warn('DatAmaranto: "'+cog+'" e\' presente in rosa piu\' di una volta. '+
             'Aggiungi la colonna "numero maglia" nel foglio DettaglioMatch per attribuire i dati.');
         });
-        if(!partite.length){
+
+        if(!matches.length){
+          const listaComp=Array.from(selezionate).map(c=>COMP_LABEL[c]||c).join(' e ');
           document.getElementById('rnd-notice').innerHTML=
-            '<div class="rnd-notice"><div class="rnd-notice-t">Stagione non ancora iniziata</div>'+
-            '<div class="rnd-notice-b">La rosa è già consultabile, ma le statistiche compariranno dopo la prima giornata di campionato. '+
-            'Da quel momento la dashboard si aggiornerà automaticamente dopo ogni partita.</div></div>';
+            '<div class="rnd-notice"><div class="rnd-notice-t">Nessuna partita disputata</div>'+
+            '<div class="rnd-notice-b">La rosa è già consultabile, ma le statistiche per '+listaComp+
+            ' compariranno qui dopo la prima partita giocata. Da quel momento la dashboard si aggiornerà '+
+            'automaticamente dopo ogni partita.</div></div>';
+        } else {
+          document.getElementById('rnd-notice').innerHTML='';
         }
+
         renderGrid();
-      }).catch(e=>{
-        document.getElementById('rnd-grid').innerHTML='<div class="rnd-loading">Errore nel caricamento dei dati.</div>';
-        console.error('DatAmaranto:',e);
-      });
+        // Se la scheda di un giocatore è aperta, la aggiorniamo con i nuovi
+        // dati senza chiuderla: altrimenti il filtro sembrava non avere effetto.
+        if(openPlayerId!==null && allP[openPlayerId]){
+          document.getElementById('rnd-dw').innerHTML=buildDettaglioHtml(allP[openPlayerId]);
+        }
+        minDone=false; pagDone=false; squadraDone=false;
+        if(currentView==='min'){minDone=true; renderMin();}
+        if(currentView==='pag'){pagDone=true; renderPag();}
+        if(currentView==='s'){squadraDone=true; renderSquadra();}
+      }
 
       /* ---------- GRIGLIA GIOCATORI ---------- */
       function renderGrid(){
@@ -647,23 +720,24 @@ function reggina_dashboard_shortcode() {
       }
 
       /* ---------- SCHEDA GIOCATORE ---------- */
-      window.rndOpen=function(id){
-        const p=allP[id]; if(!p)return;
-        const ip=p.ruolo==='portiere';
-        const gi=Object.entries(p.giornate).sort((a,b)=>+a[0]-+b[0]);
+      let openPlayerId=null;
 
-        const minBars=gi.map(function(e){const tt=e[0],g=e[1];
-          if(g.min===0)return '<div class="rnd-bar"><div class="rnd-bar-m">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">G'+tt+'</div></div>';
+      function buildDettaglioHtml(p){
+        const ip=p.ruolo==='portiere';
+        const gi=Object.entries(p.giornate).sort((a,b)=>a[1].idx-b[1].idx);
+
+        const minBars=gi.map(function(e){const g=e[1], lbl=labelPartita(g.comp,g.num,'G');
+          if(g.min===0)return '<div class="rnd-bar"><div class="rnd-bar-m">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
           const h=Math.max(4,Math.round((g.min/90)*70));
           const c=g.min>=80?'#1a7a3a':g.min>=50?'#5cb85c':g.min>=20?'#a5d6a7':'#e0e0e0';
-          return '<div class="rnd-bar"><div class="rnd-bar-m">'+g.min+"'"+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">G'+tt+'</div></div>';
+          return '<div class="rnd-bar"><div class="rnd-bar-m">'+g.min+"'"+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
         }).join('');
 
-        const votoBars=gi.map(function(e){const tt=e[0],g=e[1];
-          if(g.voto===null)return '<div class="rnd-bar"><div class="rnd-bar-v">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">G'+tt+'</div></div>';
+        const votoBars=gi.map(function(e){const g=e[1], lbl=labelPartita(g.comp,g.num,'G');
+          if(g.voto===null)return '<div class="rnd-bar"><div class="rnd-bar-v">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
           const h=Math.max(4,(g.voto-3)*24);
           const c=g.voto>=6.5?'#1a7a3a':g.voto>=6?'#5cb85c':g.voto>=5.5?'#FFD54F':'#e57373';
-          return '<div class="rnd-bar"><div class="rnd-bar-v">'+g.voto.toFixed(1).replace('.',',')+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">G'+tt+'</div></div>';
+          return '<div class="rnd-bar"><div class="rnd-bar-v">'+g.voto.toFixed(1).replace('.',',')+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
         }).join('');
 
         const mv=p.mediaVoto;
@@ -675,8 +749,7 @@ function reggina_dashboard_shortcode() {
         const isU=(p.underover||'').toLowerCase().indexOf('under')>-1;
         const anag=[p.nascita?'nato il '+p.nascita:'',p.contratto||'',p.scadenza?'scadenza '+p.scadenza:''].filter(Boolean).join(' · ');
 
-        document.getElementById('rnd-dw').innerHTML=
-          '<div class="rnd-detail"><button class="rnd-back" onclick="rndClose()"><span class="rnd-barr">←</span> Torna indietro</button>'+
+        return '<div class="rnd-detail"><button class="rnd-back" onclick="rndClose()"><span class="rnd-barr">←</span> Torna indietro</button>'+
           '<div class="rnd-dheader"><div class="rnd-dnum">'+(p.maglia||'—')+'</div><div>'+
           '<div class="rnd-dfn">'+p.nome+'</div><div class="rnd-dsn">'+p.cognome+'</div>'+
           '<div class="rnd-dbadges"><span class="rnd-rb '+(RC[p.ruolo]||'rnd-rd')+'">'+(RL[p.ruolo]||p.ruolo)+'</span>'+
@@ -692,14 +765,21 @@ function reggina_dashboard_shortcode() {
             ? '<div class="rnd-stitle">Minutaggi per giornata</div><div class="rnd-bars">'+minBars+'</div>'+
               '<div class="rnd-stitle">Pagella per giornata</div><div class="rnd-bars">'+votoBars+'</div>'
             : '<div class="rnd-empty" style="margin-top:16px"><div class="rnd-empty-t">Nessuna partita giocata</div>'+
-              '<div class="rnd-empty-b">Minutaggi e pagelle compariranno qui dopo la prima giornata di campionato.</div></div>')+
+              '<div class="rnd-empty-b">Minutaggi e pagelle compariranno qui dopo la prima partita.</div></div>')+
           '</div>';
+      }
+
+      window.rndOpen=function(id){
+        const p=allP[id]; if(!p)return;
+        openPlayerId=id;
+        document.getElementById('rnd-dw').innerHTML=buildDettaglioHtml(p);
         document.getElementById('rnd-gridview').hidden=true;
         document.getElementById('rnd-dw').hidden=false;
         document.getElementById('rn-dash').scrollIntoView({block:'start'});
       };
 
       window.rndClose=function(){
+        openPlayerId=null;
         document.getElementById('rnd-dw').hidden=true;
         document.getElementById('rnd-gridview').hidden=false;
       };
@@ -723,14 +803,8 @@ function reggina_dashboard_shortcode() {
 
       /* ---------- MINUTAGGI ---------- */
       function renderMin(){
-        if(!allP.length){
-          document.getElementById('rnd-vmin').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">I minutaggi compariranno dopo la prima giornata di campionato.</div></div>';
-          return;
-        }
-        const giornate=partite.map(r=>parseInt(r['turno']));
-        const G=giornate.length;
-        if(!G){
-          document.getElementById('rnd-vmin').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Stagione non ancora iniziata</div><div class="rnd-empty-b">I minutaggi compariranno dopo la prima giornata.</div></div>';
+        if(!allP.length||!matches.length){
+          document.getElementById('rnd-vmin').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">I minutaggi compariranno dopo la prima partita.</div></div>';
           return;
         }
 
@@ -744,12 +818,12 @@ function reggina_dashboard_shortcode() {
           '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl"><thead><tr>'+
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="hm-tot dv-hd">Minuti</th>';
-        giornate.forEach(g=>{ h+='<th class="dv-hd">'+g+'</th>'; });
+        matches.forEach(m=>{ h+='<th class="dv-hd">'+labelPartita(m._comp,m._numCampionato,'')+'</th>'; });
         h+='<th class="dv-hd dv-fill"></th>';
         h+='</tr></thead><tbody>';
 
         sorted.forEach(p=>{
-          const gi=Object.entries(p.giornate).sort((a,b)=>+a[0]-+b[0]);
+          const gi=Object.entries(p.giornate).sort((a,b)=>a[1].idx-b[1].idx);
           const totMin=gi.reduce((s,e)=>s+e[1].min,0);
           const pres=gi.filter(e=>e[1].min>0).length;
           h+='<tr><td class="dv-nm"><div class="dv-nm-s">'+p.cognome+'</div><div class="dv-nm-r">'+p.nome+'</div></td>'+
@@ -767,14 +841,8 @@ function reggina_dashboard_shortcode() {
 
       /* ---------- PAGELLE ---------- */
       function renderPag(){
-        if(!allP.length){
-          document.getElementById('rnd-vpag').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">Le pagelle compariranno dopo la prima giornata di campionato.</div></div>';
-          return;
-        }
-        const giornate=partite.map(r=>parseInt(r['turno']));
-        const G=giornate.length;
-        if(!G){
-          document.getElementById('rnd-vpag').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Stagione non ancora iniziata</div><div class="rnd-empty-b">Le pagelle compariranno dopo la prima giornata.</div></div>';
+        if(!allP.length||!matches.length){
+          document.getElementById('rnd-vpag').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">Le pagelle compariranno dopo la prima partita.</div></div>';
           return;
         }
 
@@ -782,8 +850,6 @@ function reggina_dashboard_shortcode() {
         const senzaVoto=allP.filter(p=>p.mediaVoto===null);
         const sorted=[...conVoto,...senzaVoto];
 
-        // Altezza massima barre (per normalizzare): voto max=10, base=3 → range=7
-        // Usiamo scala fissa: (voto-3)*14 px, max ~98px per voto 10
         const BAR_SCALE=14;
 
         let h='<p class="dv-note">Ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
@@ -795,7 +861,7 @@ function reggina_dashboard_shortcode() {
 
         sorted.forEach(p=>{
           const mv=p.mediaVoto;
-          const gi=Object.entries(p.giornate).sort((a,b)=>+a[0]-+b[0]);
+          const gi=Object.entries(p.giornate).sort((a,b)=>a[1].idx-b[1].idx);
 
           h+='<tr><td class="dv-nm"><div class="dv-nm-s">'+p.cognome+'</div><div class="dv-nm-r">'+p.nome+'</div></td>'+
              '<td class="pg-med"><div class="pg-med-v" style="color:'+(mv===null?'#C9C1BB':colVoto(mv))+'">'+
@@ -803,7 +869,6 @@ function reggina_dashboard_shortcode() {
              '<div class="pg-med-l">'+(mv!==null?gi.filter(e=>e[1].voto!==null&&e[1].min>0).length+' voti':'—')+'</div></td>'+
              '<td class="pg-bars">';
 
-          // Riga barre con voto sopra
           h+='<div style="display:flex;gap:3px;align-items:flex-end">';
           gi.forEach(e=>{
             const g=e[1];
@@ -819,10 +884,9 @@ function reggina_dashboard_shortcode() {
           });
           h+='</div>';
 
-          // Etichette giornata sotto
           h+='<div class="pg-lbl-row">';
           gi.forEach(e=>{
-            h+='<div class="pg-lbl">g'+parseInt(e[0])+'</div>';
+            h+='<div class="pg-lbl">'+labelPartita(e[1].comp,e[1].num,'g')+'</div>';
           });
           h+='</div>';
 
@@ -835,39 +899,55 @@ function reggina_dashboard_shortcode() {
 
       /* ---------- SQUADRA ---------- */
       function renderSquadra(){
-        if(!partite.length){
+        if(!matches.length){
           document.getElementById('rnd-vs').innerHTML=
             '<div class="rnd-empty"><div class="rnd-empty-t">In attesa del calcio d\'inizio</div>'+
-            '<div class="rnd-empty-b">Media punti, gol fatti e subiti, rendimento in casa e in trasferta: '+
-            'tutti i numeri della squadra compariranno qui dopo la prima giornata di campionato.</div></div>';
+            '<div class="rnd-empty-b">Gol fatti e subiti, rendimento in casa e in trasferta: '+
+            'tutti i numeri della squadra compariranno qui dopo la prima partita.</div></div>';
           return;
         }
         if(window.ChartDataLabels)Chart.register(ChartDataLabels);
 
-        let tp=0,pc=0,pt=0,nc=0,nt=0,n=0;
-        const lab=[],dS=[],dM=[],seq=[];
-        partite.forEach(r=>{
-          const pu=num(r['punti']);
-          const isCasa=(r['H/A']||'').toLowerCase().indexOf('casa')>-1;
-          if(isCasa){pc+=pu;nc++;}else{pt+=pu;nt++;}
-          n++;tp+=pu;seq.push(pu);
-          dS.push(+(tp/n).toFixed(2));
-          dM.push(seq.length>=5?+(seq.slice(-5).reduce((a,b)=>a+b,0)/5).toFixed(2):null);
-          lab.push('G'+r['turno']);
-        });
-        const mT=n>0?tp/n:0,mC=nc>0?pc/nc:0,mTr=nt>0?pt/nt:0;
+        // La media punti ha senso solo per il campionato: la Coppa Italia,
+        // essendo a eliminazione diretta in Serie D, non assegna punti.
+        const soloCampionato = selezionate.size===1 && selezionate.has('campionato');
 
-        const gfA=partite.map(r=>num(r['GF'])),gsA=partite.map(r=>num(r['GS']));
+        let mediaPuntiHtml='', lab=[], dS=[], dM=[];
+        if(soloCampionato){
+          let tp=0,pc=0,pt=0,nc=0,nt=0,n=0; const seq=[];
+          matches.forEach(r=>{
+            const pu=num(r['punti']);
+            const isCasa=(r['H/A']||'').toLowerCase().indexOf('casa')>-1;
+            if(isCasa){pc+=pu;nc++;}else{pt+=pu;nt++;}
+            n++;tp+=pu;seq.push(pu);
+            dS.push(+(tp/n).toFixed(2));
+            dM.push(seq.length>=5?+(seq.slice(-5).reduce((a,b)=>a+b,0)/5).toFixed(2):null);
+            lab.push(labelPartita(r._comp,r._numCampionato,'G'));
+          });
+          const mT=n>0?tp/n:0,mC=nc>0?pc/nc:0,mTr=nt>0?pt/nt:0;
+
+          mediaPuntiHtml='<div class="rnd-vs-section"><div class="rnd-stitle-main">Media punti</div>'+
+            '<div class="rnd-kpi-row">'+
+            '<div class="rnd-kpi"><span class="rnd-kv">'+mT.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media stagionale</span></div>'+
+            '<div class="rnd-kpi"><span class="rnd-kv">'+mC.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media casa</span></div>'+
+            '<div class="rnd-kpi"><span class="rnd-kv">'+mTr.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media trasferta</span></div></div>'+
+            '<div class="rnd-stitle">Media semplice — giornata per giornata</div>'+
+            '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci1"><canvas id="rnd-c1"></canvas></div></div>'+
+            '<div class="rnd-stitle">Media mobile (ultimi 5)</div>'+
+            '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci2"><canvas id="rnd-c2"></canvas></div></div></div>';
+        }
+
+        const gfA=matches.map(r=>num(r['GF'])),gsA=matches.map(r=>num(r['GS']));
         const totGF=gfA.reduce((s,v)=>s+v,0),totGS=gsA.reduce((s,v)=>s+v,0);
-        const totCS=partite.filter(r=>num(r['GS'])===0).length;
+        const totCS=matches.filter(r=>num(r['GS'])===0).length;
         const saldo=totGF-totGS;
-        const labG=partite.map(r=>'G'+r['turno']);
-        const barW=partite.length>10?partite.length*58:null;
+        const labG=matches.map(r=>labelPartita(r._comp,r._numCampionato,'G'));
+        const barW=matches.length>10?matches.length*58:null;
         const legGol='<div class="rnd-legend"><div class="rnd-cl"><div class="rnd-cl-dot" style="background:#1a7a3a"></div>Gol fatti</div><div class="rnd-cl"><div class="rnd-cl-dot" style="background:#8B0000"></div>Gol subiti</div></div>';
 
-        const casaSp=partite
+        const casaSp=matches
           .filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')>-1)
-          .map(r=>({n:spett(r['spettatori']),av:(r['avversario']||'').trim(),t:r['turno']}))
+          .map(r=>({n:spett(r['spettatori']),av:(r['avversario']||'').trim(),t:r._idx}))
           .filter(x=>x.n!==null&&x.n>0);
         const totSp=casaSp.reduce((s,x)=>s+x.n,0);
         const mediaSp=casaSp.length?Math.round(totSp/casaSp.length):0;
@@ -876,15 +956,7 @@ function reggina_dashboard_shortcode() {
         const spBarW=casaSp.length>8?casaSp.length*78:null;
 
         document.getElementById('rnd-vs').innerHTML=
-          '<div class="rnd-vs-section"><div class="rnd-stitle-main">Media punti</div>'+
-          '<div class="rnd-kpi-row">'+
-          '<div class="rnd-kpi"><span class="rnd-kv">'+mT.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media stagionale</span></div>'+
-          '<div class="rnd-kpi"><span class="rnd-kv">'+mC.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media casa</span></div>'+
-          '<div class="rnd-kpi"><span class="rnd-kv">'+mTr.toFixed(2).replace('.',',')+'</span><span class="rnd-kl">Media trasferta</span></div></div>'+
-          '<div class="rnd-stitle">Media semplice — giornata per giornata</div>'+
-          '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci1"><canvas id="rnd-c1"></canvas></div></div>'+
-          '<div class="rnd-stitle">Media mobile (ultimi 5)</div>'+
-          '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci2"><canvas id="rnd-c2"></canvas></div></div></div>'+
+          mediaPuntiHtml+
 
           '<div class="rnd-vs-section"><div class="rnd-stitle-main">Gol</div>'+
           '<div class="rnd-kpi-row">'+
@@ -924,20 +996,23 @@ function reggina_dashboard_shortcode() {
         const optLine={responsive:true,maintainAspectRatio:false,layout:{padding:{top:26}},plugins:{legend:{display:false},datalabels:dlLine},scales:axMP};
         const optBar={responsive:true,maintainAspectRatio:false,layout:{padding:{top:18}},plugins:{legend:{display:false},datalabels:dlBar},scales:axBar};
 
-        new Chart(document.getElementById('rnd-c1'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dS})]},options:optLine});
-        new Chart(document.getElementById('rnd-c2'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dM})]},options:optLine});
+        if(soloCampionato){
+          new Chart(document.getElementById('rnd-c1'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dS})]},options:optLine});
+          new Chart(document.getElementById('rnd-c2'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dM})]},options:optLine});
+        }
+
         new Chart(document.getElementById('rnd-c3'),{type:'bar',data:{labels:labG,datasets:[
           {label:'Gol fatti',data:gfA,backgroundColor:'#1a7a3a',borderRadius:3},
           {label:'Gol subiti',data:gsA,backgroundColor:'#8B0000',borderRadius:3}]},options:optBar});
 
-        const gf1=partite.reduce((s,r)=>s+num(r['GF 1t']),0),gf2=partite.reduce((s,r)=>s+num(r['GF 2t']),0);
-        const gs1=partite.reduce((s,r)=>s+num(r['GS 1t']),0),gs2=partite.reduce((s,r)=>s+num(r['GS 2t']),0);
+        const gf1=matches.reduce((s,r)=>s+num(r['GF 1t']),0),gf2=matches.reduce((s,r)=>s+num(r['GF 2t']),0);
+        const gs1=matches.reduce((s,r)=>s+num(r['GS 1t']),0),gs2=matches.reduce((s,r)=>s+num(r['GS 2t']),0);
         new Chart(document.getElementById('rnd-c4'),{type:'bar',data:{labels:['1° tempo','2° tempo'],datasets:[
           {label:'Gol fatti',data:[gf1,gf2],backgroundColor:'#1a7a3a',borderRadius:4},
           {label:'Gol subiti',data:[gs1,gs2],backgroundColor:'#8B0000',borderRadius:4}]},options:optBar});
 
-        const casa=partite.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')>-1);
-        const tras=partite.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')===-1);
+        const casa=matches.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')>-1);
+        const tras=matches.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')===-1);
         new Chart(document.getElementById('rnd-c5'),{type:'bar',data:{labels:['Casa','Trasferta'],datasets:[
           {label:'Gol fatti',data:[casa.reduce((s,r)=>s+num(r['GF']),0),tras.reduce((s,r)=>s+num(r['GF']),0)],backgroundColor:'#1a7a3a',borderRadius:4},
           {label:'Gol subiti',data:[casa.reduce((s,r)=>s+num(r['GS']),0),tras.reduce((s,r)=>s+num(r['GS']),0)],backgroundColor:'#8B0000',borderRadius:4}]},options:optBar});
@@ -963,8 +1038,22 @@ function reggina_dashboard_shortcode() {
         }
       }
 
+      /* ---------- COMPETIZIONI: toggle Campionato / Coppa Italia ---------- */
+      window.rndToggleComp=function(comp,btn){
+        if(selezionate.has(comp)){
+          if(selezionate.size===1)return; // deve restarne sempre almeno una attiva
+          selezionate.delete(comp);
+          btn.classList.remove('active');
+        } else {
+          selezionate.add(comp);
+          btn.classList.add('active');
+        }
+        ricalcola();
+      };
+
       /* ---------- NAVIGAZIONE TAB ---------- */
       window.rndView=function(v,btn){
+        currentView=v;
         document.querySelectorAll('.rnd-tab').forEach(t=>t.classList.remove('active'));
         btn.classList.add('active');
         document.getElementById('rnd-vg').hidden=v!=='g';
@@ -1346,7 +1435,7 @@ function reggina_css_utility() {
     /* Sottotitolo sotto i titoli di pagina (es. sotto "DatAmaranto") */
     p.rn-subtitle {
         max-width: 640px !important;
-        margin: -42px auto 22px !important;
+        margin: -34px auto 22px !important;
         text-align: center !important;
         font-family: 'Space Grotesk', sans-serif !important;
         font-size: 13px !important;
