@@ -128,16 +128,21 @@ function reggina_calendario_script() {
     .rn-p { background: #FAEEDA; color: #633806; }
     @media (max-width: 600px) {
         .rn-cal-section-title { font-size: 0.9rem; letter-spacing: 0.15em; }
-        .rn-cal-center-block { min-width: 70px; }
-        .rn-cal-team span { font-size: 0.85rem; max-width: 92px; line-height: 1.15; }
+        .rn-cal-center-block { min-width: 60px; }
+        .rn-cal-team span {
+            font-size: 0.8rem; line-height: 1.15;
+            max-width: 100px; min-width: 0;
+            overflow-wrap: normal; word-break: normal;
+        }
+        .rn-cal-team { min-width: 0; }
 .rn-cal-team.away span { text-align: right; }
 .rn-cal-team:not(.away) span { text-align: left; }
-        .rn-cal-team img { width: 22px; height: 22px; }
+        .rn-cal-team img { width: 20px; height: 20px; flex-shrink: 0; }
         .rn-cal-giornata { font-size: 0.65rem; }
         .rn-cal-score { font-size: 1.2rem; }
         .rn-cal-time { font-size: 0.8rem; }
         .rn-cal-result { font-size: 0.6rem; padding: 1px 4px; }
-        .rn-cal-row { padding: 0.6rem 0; gap: 3px; }
+        .rn-cal-row { padding: 0.6rem 0; gap: 4px; }
     }
     </style>
 
@@ -163,15 +168,19 @@ function reggina_calendario_script() {
         }
 
         function shortName(name) {
+            // Le chiavi sono in minuscolo: il confronto ignora maiuscole/minuscole,
+            // perché il nome nei dati puo' arrivare scritto in modi diversi
+            // (es. "CastrumFavara" invece di "Castrumfavara").
             const abbr = {
-    'Castrumfavara': 'Castrum',
-    'Praiatortora': 'Praia Tortora',
-    'Vigor Lamezia': 'V. Lamezia',
-    'Athletic Palermo': 'Ath. Palermo',
-    'Nuova Igea Virtus': 'N. Igea Virtus',
-    'Sancataldese': 'Sancataldese',
+    'castrumfavara': 'Castrum<wbr>Favara',
+    'praiatortora': 'Praia<wbr>Tortora',
+    'vigor lamezia': 'V. Lamezia',
+    'athletic palermo': 'Ath. Palermo',
+    'nuova igea virtus': 'N. Igea Virtus',
+    'sancataldese': 'Sancataldese',
 };
-            return abbr[name] || name;
+            const chiave = String(name || '').toLowerCase().trim();
+            return abbr[chiave] || name;
         }
 
         function parseData(str) {
