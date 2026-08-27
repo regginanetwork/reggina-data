@@ -726,5 +726,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/matheus-reis/leistungsdatendetails/spieler/973568"
+ },
+ {
+  "numero maglia": "",
+  "nome": "Sulayman",
+  "cognome": "Jallow",
+  "ruolo": "attaccante",
+  "under/over": "over",
+  "data di nascita": "30/10/1996",
+  "età": "29,8",
+  "tipologia contratto": "in prestito",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/sulayman-jallow/profil/spieler/388258"
  }
 ]
