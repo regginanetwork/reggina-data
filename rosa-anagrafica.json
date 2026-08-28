@@ -676,7 +676,7 @@
   "transfermarkt": "https://www.transfermarkt.it/andrea-di-grazia/profil/spieler/287265"
  },
  {
-  "numero maglia": "",
+  "numero maglia": "10",
   "nome": "Michele",
   "cognome": "Guida",
   "ruolo": "attaccante",
@@ -689,7 +689,7 @@
   "transfermarkt": "https://www.transfermarkt.it/michele-guida/profil/spieler/411387"
  },
  {
-  "numero maglia": "",
+  "numero maglia": "21",
   "nome": "Giuliano",
   "cognome": "Alma",
   "ruolo": "attaccante",
@@ -715,7 +715,7 @@
   "transfermarkt": "https://www.transfermarkt.it/lorenzo-piras/profil/spieler/999271"
  },
  {
-  "numero maglia": "",
+  "numero maglia": "11",
   "nome": "Matheus",
   "cognome": "Reis",
   "ruolo": "attaccante",
@@ -728,7 +728,7 @@
   "transfermarkt": "https://www.transfermarkt.it/matheus-reis/leistungsdatendetails/spieler/973568"
  },
  {
-  "numero maglia": "",
+  "numero maglia": "96",
   "nome": "Sulayman",
   "cognome": "Jallow",
   "ruolo": "attaccante",
@@ -739,5 +739,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/sulayman-jallow/profil/spieler/388258"
+ },
+ {
+  "numero maglia": "89",
+  "nome": "Antonino",
+  "cognome": "Pellicanà",
+  "ruolo": "attaccante",
+  "under/over": "under (2006)",
+  "data di nascita": "5/6/2006",
+  "età": "20,2",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/antonino-pellicano/profil/spieler/1057840"
  }
 ]
