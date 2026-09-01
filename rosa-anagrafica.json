@@ -765,5 +765,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/andrea-magrassi/profil/spieler/175788"
+ },
+ {
+  "numero maglia": "",
+  "nome": "Matteo",
+  "cognome": "Rossetti",
+  "ruolo": "centrocampista",
+  "under/over": "over",
+  "data di nascita": "23/07/1998",
+  "età": "28,1",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/matteo-rossetti/profil/spieler/440878"
  }
 ]
