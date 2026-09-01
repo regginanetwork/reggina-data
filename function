@@ -2229,7 +2229,9 @@ function reggina_rosa_shortcode() {
 
     <script>
     (function(){
-      var BASE='<?php echo rest_url('rn/v1/data/'); ?>';
+      // JSON encoding keeps the generated JavaScript valid even if the site URL
+      // contains characters that would otherwise close a quoted JS string.
+      var BASE=<?php echo wp_json_encode( rest_url( 'rn/v1/data/' ) ); ?>;
       var RL={portiere:'Portiere',difensore:'Difensore',centrocampista:'Centrocampista',attaccante:'Attaccante'};
       var RF={portiere:'🧤 Portieri',difensore:'🛡️ Difensori',centrocampista:'👟 Centrocampisti',attaccante:'⚽ Attaccanti'};
       var RS={portiere:'POR',difensore:'DIF',centrocampista:'CEN',attaccante:'ATT'};
@@ -2286,7 +2288,10 @@ function reggina_rosa_shortcode() {
         .then(function(rows){
           ROSA=rows.filter(function(r){
             var v=String(r['in rosa']||'').toLowerCase();
-            return (v==='sì'||v==='si') && String(r['cognome']||'').trim()!=='';
+            if (v!=='sì') {
+              if (v!=='si') return false;
+            }
+            return String(r['cognome']||'').trim()!=='';
           }).map(function(r){
             return {
               m:String(r['numero maglia']||'').trim(),
@@ -2354,7 +2359,7 @@ function reggina_rosa_shortcode() {
         document.querySelectorAll('.rr-f').forEach(function(b){b.classList.remove('on')});
         btn.classList.add('on');
         document.querySelectorAll('.rr-card').forEach(function(c){
-          c.classList.toggle('off', r!=='tutti' && c.dataset.r!==r);
+          c.classList.toggle('off', r!=='tutti' ? c.dataset.r!==r : false);
         });
       };
 
@@ -2375,7 +2380,7 @@ function reggina_rosa_shortcode() {
         var disp=Object.keys(scelti).map(function(k){return scelti[k]});
         var res=[];
         quote.forEach(function(q){
-          var cand=disp.filter(function(g){ return g.a && g.a>=q.y; })
+          var cand=disp.filter(function(g){ return g.a ? g.a>=q.y : false; })
                        .sort(function(a,b){ return a.a-b.a; });
           var s=cand.length?cand[0]:null;
           if(s) disp.splice(disp.indexOf(s),1);
@@ -2411,7 +2416,8 @@ function reggina_rosa_shortcode() {
       /* Mostriamo l'anno a ogni under in campo, non solo ai tre che
          coprono le quote: chi guarda vuole vedere tutti i giovani. */
       function annoUnder(g){
-        return (g && g.a && g.a>=2006) ? g.a : null;
+        if (!g || !g.a) return null;
+        return g.a>=2006 ? g.a : null;
       }
 
       function disegna(){
@@ -2426,7 +2432,7 @@ function reggina_rosa_shortcode() {
           d.onclick=function(){ apri(i,pos[2]); };
           var an=annoUnder(g);
           var badge=an?'<span class="rr-slot-u">'+an+'</span>':'';
-          var cls='rr-slot-c'+(g&&!g.m?' noshirt':'');
+          var cls='rr-slot-c'+(g ? (!g.m ? ' noshirt' : '') : '');
           d.innerHTML='<div class="'+cls+'">'+(g?sigla(g,pos[2]):'+')+badge+'</div>'+
                       '<div class="rr-slot-n">'+(g?g.c:pos[2])+'</div>';
           p.appendChild(d);
@@ -2627,12 +2633,12 @@ function reggina_rosa_shortcode() {
           var limiteMax=null;
           slots.forEach(function(o){
             if (o===s) return;
-            if (o.py>py && Math.abs(o.px-px)<90) {
+            if (o.py>py ? Math.abs(o.px-px)<90 : false) {
               var limite = o.py - JTOP - GAP_SOTTO_MIN - LABEL_H;
               if (limiteMax===null || limite<limiteMax) limiteMax=limite;
             }
           });
-          if (limiteMax!==null && labelTop>limiteMax) {
+          if (limiteMax!==null ? labelTop>limiteMax : false) {
             labelTop = Math.max(py+JBOTTOM+4, limiteMax);
           }
 
@@ -2663,7 +2669,7 @@ function reggina_rosa_shortcode() {
           // il long-press sull'anteprima resta la strada piu' affidabile.
           box.innerHTML=
             '<a class="rr-sh-b rr-sh-dl" href="'+url+'" download="formazione.png">'+DL+' Scarica</a>'+
-            '<p class="rr-sh-note">Su telefono, per salvarla in galleria tieni premuto sull\'immagine qui sopra e scegli <strong>Salva immagine</strong>.<br>Se la pubblichi su Instagram, taggaci: <strong>@regginanetwork</strong></p>';
+            '<p class="rr-sh-note">Su telefono, per salvarla in galleria tieni premuto sull’immagine qui sopra e scegli <strong>Salva immagine</strong>.<br>Se la pubblichi su Instagram, taggaci: <strong>@regginanetwork</strong></p>';
         },'image/png');
       }
 
@@ -2729,3 +2735,66 @@ function rn_register_api_routes() {
     }
 }
 add_action( 'rest_api_init', 'rn_register_api_routes' );
+
+/*	-----------------------------------------------------------------------------------------------
+	LINK IN FONDO PAGINA
+--------------------------------------------------------------------------------------------------- */
+
+function reggina_footer_legal_links() {
+    ?>
+    <nav class="rnf-legal-links" aria-label="Informazioni sul sito">
+      <a href="https://www.regginanetwork.it/chi-siamo/">chi siamo</a>
+      <span class="rnf-legal-dot" aria-hidden="true"></span>
+      <a href="https://www.regginanetwork.it/privacy-policy/">privacy policy</a>
+    </nav>
+
+    <style>
+    .rnf-legal-links{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      margin:16px auto 24px;
+      padding:0 20px;
+      color:#777;
+      font-family:'Space Grotesk',sans-serif;
+      font-size:12px;
+      font-weight:600;
+      line-height:1;
+    }
+    .rnf-legal-links a{
+      color:inherit;
+      text-decoration:none;
+      transition:color .15s ease;
+    }
+    .rnf-legal-links a:hover,
+    .rnf-legal-links a:focus-visible{
+      color:#660000;
+    }
+    .rnf-legal-dot{
+      width:3px;
+      height:3px;
+      border-radius:50%;
+      background:currentColor;
+      flex:0 0 auto;
+    }
+    </style>
+
+    <script>
+    (function(){
+      var links=document.querySelector('.rnf-legal-links');
+      if(!links) return;
+
+      var paragrafi=document.querySelectorAll('p');
+      for(var i=0;i<paragrafi.length;i++){
+        var testo=String(paragrafi[i].textContent||'');
+        if(testo.indexOf('I contenuti di questo sito sono pubblicati')>-1){
+          paragrafi[i].insertAdjacentElement('afterend',links);
+          break;
+        }
+      }
+    })();
+    </script>
+    <?php
+}
+add_action( 'wp_footer', 'reggina_footer_legal_links', 100 );
