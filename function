@@ -2481,11 +2481,99 @@ function reggina_rosa_shortcode() {
       };
 
       /* ---------- IMMAGINE ---------- */
+
+      // Disegna una maglia da calcio stilizzata al posto del vecchio cerchio.
+      function rrDisegnaMaglia(ctx, cx, cy, w, h, colore){
+        var hw=w/2, hh=h/2;
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        ctx.beginPath();
+        ctx.moveTo(-hw*0.22, -hh);
+        ctx.quadraticCurveTo(-hw*0.55, -hh*0.97, -hw*0.80, -hh*0.84);
+        ctx.quadraticCurveTo(-hw*1.06, -hh*0.72, -hw*0.97, -hh*0.40);
+        ctx.quadraticCurveTo(-hw*0.84, -hh*0.28, -hw*0.60, -hh*0.40);
+        ctx.lineTo(-hw*0.60, hh*0.80);
+        ctx.quadraticCurveTo(-hw*0.60, hh*0.97, -hw*0.44, hh*0.97);
+        ctx.lineTo(hw*0.44, hh*0.97);
+        ctx.quadraticCurveTo(hw*0.60, hh*0.97, hw*0.60, hh*0.80);
+        ctx.lineTo(hw*0.60, -hh*0.40);
+        ctx.quadraticCurveTo(hw*0.84, -hh*0.28, hw*0.97, -hh*0.40);
+        ctx.quadraticCurveTo(hw*1.06, -hh*0.72, hw*0.80, -hh*0.84);
+        ctx.quadraticCurveTo(hw*0.55, -hh*0.97, hw*0.22, -hh);
+        ctx.quadraticCurveTo(0, -hh*0.70, -hw*0.22, -hh);
+        ctx.closePath();
+
+        // Colore della maglia: lo stesso amaranto di "REGGINA" nel logo
+        // dell'header (#660000).
+        var grad = ctx.createLinearGradient(0,-hh,0,hh);
+        grad.addColorStop(0, '#7a0000');
+        grad.addColorStop(1, '#5c0000');
+        ctx.fillStyle = grad;
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'rgba(0,0,0,.30)';
+        ctx.stroke();
+
+        // Colletto: fascia piena (non solo un tratto), dello stesso scuro
+        // di "NETWORK" nel logo (#222). Una fascia si stacca dal bordo
+        // scuro della sagoma molto meglio di una semplice linea.
+        ctx.beginPath();
+        ctx.moveTo(-hw*0.24, -hh*0.99);
+        ctx.quadraticCurveTo(0, -hh*0.68, hw*0.24, -hh*0.99);
+        ctx.lineTo(hw*0.15, -hh*0.90);
+        ctx.quadraticCurveTo(0, -hh*0.58, -hw*0.15, -hh*0.90);
+        ctx.closePath();
+        ctx.fillStyle = '#222';
+        ctx.fill();
+
+        ctx.restore();
+      }
+
       window.rrGenera=function(){
-        var W=800,H=1000,cv=document.createElement('canvas');
+        var FONT_NOME = 22;
+        var MARGINE = 26;   // spazio minimo tra due etichette vicine
+
+        // ---------- 1. Calcolo quanto deve essere largo il campo ----------
+        // Invece di rimpicciolire il font o tagliare i nomi, allarghiamo il
+        // campo quanto basta perché ogni cognome, alla sua dimensione piena,
+        // abbia spazio a sufficienza rispetto al vicino sulla stessa riga.
+        var misura=document.createElement('canvas').getContext('2d');
+        misura.font = '700 '+FONT_NOME+'px "Space Grotesk"';
+
+        var slotsBase=[];
+        MODULI[modulo].forEach(function(pos,i){
+          var g=scelti[i]; if(!g) return;
+          slotsBase.push({pos:pos, w:misura.measureText(g.c).width});
+        });
+
+        var ordinatiBase=slotsBase.slice().sort(function(a,b){return a.pos[1]-b.pos[1];});
+        var righeBase=[];
+        ordinatiBase.forEach(function(s){
+          var r=righeBase.find(function(r){ return Math.abs(r[0].pos[1]-s.pos[1])<8; });
+          if (r) r.push(s); else righeBase.push([s]);
+        });
+
+        var innerNecessaria = 710; // 800-90: larghezza minima di base
+        righeBase.forEach(function(riga){
+          riga.sort(function(a,b){ return a.pos[0]-b.pos[0]; });
+          for (var k=0;k<riga.length-1;k++){
+            var a=riga[k], b=riga[k+1];
+            var percentGap = b.pos[0]-a.pos[0];
+            if (percentGap<=0) continue;
+            var pixelGapRichiesto = a.w/2 + b.w/2 + MARGINE;
+            var necessaria = pixelGapRichiesto*100/percentGap;
+            if (necessaria>innerNecessaria) innerNecessaria=necessaria;
+          }
+        });
+        innerNecessaria = Math.min(innerNecessaria, 1250); // tetto di sicurezza
+
+        var W=Math.round(innerNecessaria+90), H=1000;
+        var cv=document.createElement('canvas');
         cv.width=W; cv.height=H;
         var x=cv.getContext('2d');
 
+        // ---------- 2. Disegno del campo ----------
         var gr=x.createLinearGradient(0,0,0,H);
         gr.addColorStop(0,'#2F7D4F'); gr.addColorStop(1,'#1E5733');
         x.fillStyle=gr; x.fillRect(0,0,W,H);
@@ -2506,28 +2594,52 @@ function reggina_rosa_shortcode() {
         x.strokeRect(W/2-130,t,260,110);
         x.strokeRect(W/2-130,t+cH-110,260,110);
 
+        // ---------- 3. Maglie e nomi ----------
+        var JW=62, JH=68, JTOP=JH/2, JBOTTOM=JH*0.46;
+        var LABEL_H=32, GAP_SOPRA=12, GAP_SOTTO_MIN=8;
+
+        var slots=[];
         MODULI[modulo].forEach(function(pos,i){
           var g=scelti[i]; if(!g) return;
           var px=(pos[0]/100)*(W-90)+45, py=t+(pos[1]/100)*cH;
+          slots.push({g:g, pos:pos, px:px, py:py});
+        });
 
-          x.beginPath(); x.arc(px,py,40,0,7);
-          x.fillStyle='#fff'; x.fill();
-          x.lineWidth=4; x.strokeStyle='#8B0000'; x.stroke();
+        x.font='700 '+FONT_NOME+'px "Space Grotesk",sans-serif';
 
-          x.fillStyle='#8B0000';
-          x.font='700 '+(g.m?36:21)+'px "Space Grotesk",sans-serif';
+        slots.forEach(function(s){
+          var px=s.px, py=s.py, g=s.g, pos=s.pos;
+
+          rrDisegnaMaglia(x, px, py, JW, JH, '#8B0000');
+
+          x.fillStyle='#fff';
+          x.font='700 '+(g.m?24:16)+'px "Space Grotesk",sans-serif';
           x.textAlign='center'; x.textBaseline='middle';
-          x.fillText(sigla(g,pos[2]),px,py+1);
+          x.fillText(sigla(g,pos[2]), px, py+4);
 
           x.textBaseline='alphabetic';
-          var fs=28, maxW=W/5.6;
-          do { x.font='700 '+fs+'px "Space Grotesk",sans-serif'; fs-=1; }
-          while (x.measureText(g.c).width>maxW && fs>17);
+          x.font='700 '+FONT_NOME+'px "Space Grotesk",sans-serif';
           var w=x.measureText(g.c).width;
+
+          var labelTop = py + JBOTTOM + GAP_SOPRA;
+
+          // non toccare la maglia di un giocatore in una riga sottostante
+          var limiteMax=null;
+          slots.forEach(function(o){
+            if (o===s) return;
+            if (o.py>py && Math.abs(o.px-px)<90) {
+              var limite = o.py - JTOP - GAP_SOTTO_MIN - LABEL_H;
+              if (limiteMax===null || limite<limiteMax) limiteMax=limite;
+            }
+          });
+          if (limiteMax!==null && labelTop>limiteMax) {
+            labelTop = Math.max(py+JBOTTOM+4, limiteMax);
+          }
+
           x.fillStyle='rgba(0,0,0,.58)';
-          x.fillRect(px-w/2-12,py+48,w+24,38);
+          x.fillRect(px-w/2-11, labelTop, w+22, LABEL_H);
           x.fillStyle='#fff';
-          x.fillText(g.c,px,py+75);
+          x.fillText(g.c, px, labelTop+LABEL_H-8);
         });
 
         x.textAlign='center';
