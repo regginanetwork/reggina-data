@@ -752,5 +752,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/antonino-pellicano/profil/spieler/1057840"
+ },
+ {
+  "numero maglia": "9",
+  "nome": "Andrea",
+  "cognome": "Magrassi",
+  "ruolo": "attaccante",
+  "under/over": "over",
+  "data di nascita": "06/02/1993",
+  "età": "33,6",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/andrea-magrassi/profil/spieler/175788"
  }
 ]
