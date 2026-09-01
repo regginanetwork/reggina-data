@@ -2537,8 +2537,8 @@ function reggina_rosa_shortcode() {
       }
 
       window.rrGenera=function(){
-        var FONT_NOME = 22;
-        var MARGINE = 26;   // spazio minimo tra due etichette vicine
+        var FONT_NOME = 30;
+        var MARGINE = 34;   // spazio minimo tra due etichette vicine
 
         // ---------- 1. Calcolo quanto deve essere largo il campo ----------
         // Invece di rimpicciolire il font o tagliare i nomi, allarghiamo il
@@ -2574,7 +2574,7 @@ function reggina_rosa_shortcode() {
         });
         innerNecessaria = Math.min(innerNecessaria, 1250); // tetto di sicurezza
 
-        var W=Math.round(innerNecessaria+90), H=1000;
+        var W=Math.round(innerNecessaria+90), H=1080;
         var cv=document.createElement('canvas');
         cv.width=W; cv.height=H;
         var x=cv.getContext('2d');
@@ -2601,8 +2601,8 @@ function reggina_rosa_shortcode() {
         x.strokeRect(W/2-130,t+cH-110,260,110);
 
         // ---------- 3. Maglie e nomi ----------
-        var JW=62, JH=68, JTOP=JH/2, JBOTTOM=JH*0.46;
-        var LABEL_H=32, GAP_SOPRA=12, GAP_SOTTO_MIN=8;
+        var JW=84, JH=90, JTOP=JH/2, JBOTTOM=JH*0.46;
+        var LABEL_H=42, GAP_SOPRA=13, GAP_SOTTO_MIN=12;
 
         var slots=[];
         MODULI[modulo].forEach(function(pos,i){
@@ -2619,9 +2619,9 @@ function reggina_rosa_shortcode() {
           rrDisegnaMaglia(x, px, py, JW, JH, '#8B0000');
 
           x.fillStyle='#fff';
-          x.font='700 '+(g.m?24:16)+'px "Space Grotesk",sans-serif';
+          x.font='700 '+(g.m?32:21)+'px "Space Grotesk",sans-serif';
           x.textAlign='center'; x.textBaseline='middle';
-          x.fillText(sigla(g,pos[2]), px, py+4);
+          x.fillText(sigla(g,pos[2]), px, py+5);
 
           x.textBaseline='alphabetic';
           x.font='700 '+FONT_NOME+'px "Space Grotesk",sans-serif';
@@ -2633,7 +2633,7 @@ function reggina_rosa_shortcode() {
           var limiteMax=null;
           slots.forEach(function(o){
             if (o===s) return;
-            if (o.py>py ? Math.abs(o.px-px)<90 : false) {
+            if (o.py>py ? Math.abs(o.px-px)<120 : false) {
               var limite = o.py - JTOP - GAP_SOTTO_MIN - LABEL_H;
               if (limiteMax===null || limite<limiteMax) limiteMax=limite;
             }
@@ -2643,9 +2643,9 @@ function reggina_rosa_shortcode() {
           }
 
           x.fillStyle='rgba(0,0,0,.58)';
-          x.fillRect(px-w/2-11, labelTop, w+22, LABEL_H);
+          x.fillRect(px-w/2-15, labelTop, w+30, LABEL_H);
           x.fillStyle='#fff';
-          x.fillText(g.c, px, labelTop+LABEL_H-8);
+          x.fillText(g.c, px, labelTop+LABEL_H-10);
         });
 
         x.textAlign='center';
@@ -2749,6 +2749,23 @@ function reggina_footer_legal_links() {
     </nav>
 
     <style>
+    .rnf-legal-copy{
+      display:block !important;
+      width:calc(100% - 48px) !important;
+      max-width:760px !important;
+      margin:0 auto !important;
+      padding:0 !important;
+      font-size:10px !important;
+      line-height:1.5 !important;
+      text-align:center !important;
+    }
+    @media(max-width:600px){
+      .rnf-legal-copy{
+        max-width:350px !important;
+        font-size:10px !important;
+        line-height:1.45 !important;
+      }
+    }
     .rnf-legal-links{
       display:flex;
       align-items:center;
@@ -2789,6 +2806,7 @@ function reggina_footer_legal_links() {
       for(var i=0;i<paragrafi.length;i++){
         var testo=String(paragrafi[i].textContent||'');
         if(testo.indexOf('I contenuti di questo sito sono pubblicati')>-1){
+          paragrafi[i].classList.add('rnf-legal-copy');
           paragrafi[i].insertAdjacentElement('afterend',links);
           break;
         }
