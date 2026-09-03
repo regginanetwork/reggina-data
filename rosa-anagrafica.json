@@ -778,5 +778,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/matteo-rossetti/profil/spieler/440878"
+ },
+ {
+  "numero maglia": "",
+  "nome": "Marco",
+  "cognome": "Baldan",
+  "ruolo": "difensore",
+  "under/over": "over",
+  "data di nascita": "13/11/1993",
+  "età": "32,8",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/marco-baldan/profil/spieler/160322"
  }
 ]
