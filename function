@@ -1455,6 +1455,41 @@ function reggina_css_utility() {
     @media (max-width: 600px) {
         p.rn-subtitle { font-size: 12px !important; padding: 0 16px; }
     }
+
+    /* Effetto "shimmer" sul testo "canale WhatsApp" nel blocco di benvenuto */
+    .rn-wa-shimmer{
+        font-weight:700;
+        background:linear-gradient(90deg,
+            #1a9e4e 0%, #1a9e4e 35%,
+            #7ee8a8 50%,
+            #1a9e4e 65%, #1a9e4e 100%);
+        background-size:250% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+        animation:rnWaShimmer 3s linear infinite;
+    }
+    @keyframes rnWaShimmer{
+        0%{background-position:200% 0;}
+        100%{background-position:-50% 0;}
+    }
+
+    /* Effetto "shimmer" su "Amaranto" nella voce di menu "DatAmaranto" */
+    .rn-amaranto-shimmer{
+        background:linear-gradient(90deg,
+            #660000 0%, #660000 35%,
+            #d94f4f 50%,
+            #660000 65%, #660000 100%);
+        background-size:250% 100%;
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+        animation:rnAmarantoShimmer 3s linear infinite;
+    }
+    @keyframes rnAmarantoShimmer{
+        0%{background-position:200% 0;}
+        100%{background-position:-50% 0;}
+    }
     </style>
     <?php
 }
@@ -1486,8 +1521,8 @@ function reggina_popup_whatsapp() {
     ?>
     <div class="rnp" id="rnp" hidden>
       <button class="rnp-x" id="rnp-x" aria-label="Chiudi">&times;</button>
-      <div class="rnp-t">Le notizie sulla Reggina appena escono</div>
-      <div class="rnp-s">Senza fretta e senza urlare. Solo i fatti, con il contesto.</div>
+      <div class="rnp-t">La Reggina in tasca. Semplice.</div>
+      <div class="rnp-s">Solo i fatti, spiegati. Senza fretta e senza urlare.</div>
       <a class="rnp-go" id="rnp-go" href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.121 1.527 5.855L.057 23.882l6.196-1.624A11.935 11.935 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.369l-.36-.213-3.68.964.983-3.594-.234-.37A9.818 9.818 0 1112 21.818z"/></svg>
         <span class="rnp-go-tx">
@@ -1701,7 +1736,7 @@ function reggina_header_compatto() {
           </div>
         </div>
 
-        <a href="<?php echo esc_url( $home ); ?>datamaranto/">DatAmaranto</a>
+        <a href="<?php echo esc_url( $home ); ?>datamaranto/">Dat<span class="rn-amaranto-shimmer">Amaranto</span></a>
         <!-- Su mobile lo spazio non basta: resta solo nel pannello -->
         <a class="rnh-desk" href="<?php echo esc_url( $home ); ?>chi-siamo/">Chi siamo</a>
       </nav>
@@ -1735,7 +1770,7 @@ function reggina_header_compatto() {
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>calendario/">Calendario</a>
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>amaranto-starter-pack/dove-seguire-le-partite-della-reggina/">Dove vedere le partite</a>
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>rosa/">Rosa</a>
-        <a href="<?php echo esc_url( $home ); ?>datamaranto/">DatAmaranto</a>
+        <a href="<?php echo esc_url( $home ); ?>datamaranto/">Dat<span class="rn-amaranto-shimmer">Amaranto</span></a>
         <a href="<?php echo esc_url( $home ); ?>chi-siamo/">Chi siamo</a>
         <a class="rnh-panel-cta" href="<?php echo esc_url( $wa ); ?>" target="_blank" rel="noopener">Iscriviti al canale WhatsApp</a>
       </div>
