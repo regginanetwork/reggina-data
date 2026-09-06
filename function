@@ -982,7 +982,7 @@ function reggina_dashboard_shortcode() {
 
         const casaSp=matches
           .filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')>-1)
-          .map(r=>({n:spett(r['spettatori']),av:(r['avversario']||'').trim(),t:r._idx}))
+          .map(r=>({n:spett(r['spettatori']),av:(r['avversario']||'').trim(),t:r._idx,comp:r._comp,num:r._numCampionato}))
           .filter(x=>x.n!==null&&x.n>0);
         const totSp=casaSp.reduce((s,x)=>s+x.n,0);
         const mediaSp=casaSp.length?Math.round(totSp/casaSp.length):0;
@@ -1065,7 +1065,7 @@ function reggina_dashboard_shortcode() {
             scales:{x:{grid:{display:false},ticks:{font:fo,color:'#666',maxRotation:0}},
               y:{grid:{color:'#f5f5f5'},ticks:{font:fo,color:'#bbb',callback:v=>fmt(v)},beginAtZero:true}}};
           new Chart(document.getElementById('rnd-c7'),{type:'bar',data:{
-            labels:casaSp.map(x=>x.av),
+            labels:casaSp.map(x=>labelPartita(x.comp,x.num,'G')),
             datasets:[{label:'Spettatori',data:casaSp.map(x=>x.n),backgroundColor:'#8B0000',borderRadius:4}]},
             options:optSp});
           const sc=document.getElementById('rnd-ci7');
