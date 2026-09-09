@@ -26,7 +26,7 @@
 
 <!-- wp:column {"style":{"spacing":{"blockGap":"1em"}}} -->
 <div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
-<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <strong>canale WhatsApp</strong>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
+<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <span class="rn-wa-shimmer">canale WhatsApp</span>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
@@ -60,17 +60,56 @@
 .rn-sp-i:hover .rn-sp-c { color: #8B0000; text-decoration: underline; }
 
 /* ---------- DatAmaranto ---------- */
+@property --rn-dm-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
 .rn-dm {
   display: grid; grid-template-columns: 1.1fr 1fr;
   max-width: 1080px; margin: 0 auto;
-  background: #FBF8F6; border: 1px solid #EDE4E0; border-radius: 10px;
+  background: #FBF8F6; border-radius: 10px;
   overflow: hidden; text-decoration: none !important; color: inherit;
-  transition: border-color .2s;
   font-family: 'Space Grotesk', sans-serif;
+  position: relative;
+  padding: 2px; /* spessore della cornice luminosa */
 }
-.rn-dm:hover { border-color: #8B0000; }
-.rn-dm-l { padding: 30px 32px; }
-.rn-dm-r { position: relative; overflow: hidden; min-height: 170px; }
+/* Bordo sottile sempre visibile, sopra il quale scorre la luce */
+.rn-dm::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 10px;
+  border: 1px solid #EDE4E0;
+  pointer-events: none;
+  z-index: 2;
+  transition: border-color .2s;
+}
+.rn-dm:hover::after { border-color: #8B0000; }
+/* Piccolo arco di luce che scorre lungo tutto il perimetro */
+.rn-dm::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 10px;
+  padding: 2px;
+  background: conic-gradient(from var(--rn-dm-angle),
+    transparent 0%,
+    transparent 82%,
+    #8B0000 88%,
+    #ff6b7a 92%,
+    #8B0000 96%,
+    transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: rn-dm-border-spin 4s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+@keyframes rn-dm-border-spin {
+  to { --rn-dm-angle: 360deg; }
+}
+.rn-dm-l { padding: 30px 32px; position: relative; z-index: 3; }
+.rn-dm-r { position: relative; overflow: hidden; min-height: 170px; z-index: 3; }
 .rn-dm-r svg { position: absolute; right: 0; bottom: 0; width: 110%; height: 105%; opacity: .22; }
 .rn-dm-line { stroke-dasharray: 520; animation: rnDmDraw 7s ease-in-out infinite; }
 @keyframes rnDmDraw {
@@ -148,8 +187,8 @@
 <a class="rn-dm" href="https://regginanetwork.it/datamaranto">
   <div class="rn-dm-l">
     <span class="rn-dm-k">Dati e statistiche</span>
-    <div class="rn-dm-t">DatAmaranto</div>
-    <div class="rn-dm-s">Rosa, minutaggi, pagelle, gol e media punti. Tutti i numeri della Reggina in un unico posto.</div>
+    <div class="rn-dm-t">Dat<span class="rn-amaranto-shimmer">Amaranto</span></div>
+    <div class="rn-dm-s">Dai minutaggi ai cartellini, passando per gol, assist e pagelle. Tutti i dati della Reggina in un unico posto.</div>
     <span class="rn-dm-c">Esplora la dashboard <span class="rn-dm-a">&rarr;</span></span>
   </div>
   <div class="rn-dm-r">
