@@ -295,10 +295,12 @@ function reggina_dashboard_shortcode() {
     <style>
     #rn-dash{font-family:'Space Grotesk',sans-serif;font-size:14px;color:#111;max-width:900px;margin:0 auto}
     #rn-dash *{box-sizing:border-box}
-    .rnd-tabs{display:flex;margin-bottom:20px;border-bottom:0.5px solid #eee;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .rnd-tabs-wrap{margin-bottom:20px}
+    .rnd-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+    .rnd-tabs-dots{display:none}
     .rnd-tabs::-webkit-scrollbar{display:none}
-    .rnd-tab{flex-shrink:0;padding:10px 16px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:500;color:#999;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;white-space:nowrap}
-    .rnd-tab.active{color:#8B0000;border-bottom-color:#8B0000}
+    .rnd-tab{flex-shrink:0;padding:9px 15px;font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600;color:#B0A9A4;border:none;background:none;border-radius:10px;cursor:pointer;white-space:nowrap;transition:all .15s}
+    .rnd-tab.active{background:#fff;color:#8B0000;box-shadow:0 3px 10px rgba(139,0,0,.12),0 1px 2px rgba(0,0,0,.06)}
     .rnd-controls{margin-bottom:14px}
     .rnd-controls-search{margin-bottom:8px}
     .rnd-search{width:100%;padding:10px 14px;border:0.5px solid #ddd;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:15px;outline:none}
@@ -326,7 +328,7 @@ function reggina_dashboard_shortcode() {
     .rnd-ps{text-align:center;min-width:46px}
     .rnd-psv{display:block;font-size:17px;font-weight:600;color:#111}
     .rnd-psv.r{color:#8B0000}.rnd-psv.g{color:#1a7a3a}
-    .rnd-psl{display:block;font-size:11px;color:#888;letter-spacing:0.04em;text-transform:uppercase;margin-top:1px}
+    .rnd-psl{display:block;font-size:11px;color:#888;letter-spacing:0.04em;text-transform:uppercase;margin-top:1px;white-space:nowrap}
     .rnd-pcard-footer{margin-top:10px;padding-top:7px;border-top:0.5px solid #f0f0f0;font-size:13px;font-weight:600;color:#ccc;letter-spacing:0.04em;display:flex;align-items:center;justify-content:flex-end;gap:4px}
     .rnd-pcard:hover .rnd-pcard-footer{color:#8B0000}
     .rnd-farrow{display:inline-block;color:#8B0000;animation:rndArrow 1.4s ease-in-out infinite}
@@ -458,15 +460,56 @@ function reggina_dashboard_shortcode() {
       .dv-tbl thead .hm-tot{left:98px}
       .hm-c{width:24px;height:24px;line-height:24px;font-size:9px}
       .hm-td{width:28px}
+      .ga-kpi-row{grid-template-columns:repeat(2,1fr)}
+      .rnd-tabs-dots{
+        display:flex;gap:5px;justify-content:center;margin:-12px 0 16px;
+      }
+      .rnd-dot{width:5px;height:5px;border-radius:50%;background:#E2DAD4;transition:all .15s}
+      .rnd-dot.on{background:#8B0000;width:14px;border-radius:3px}
     }
+
+    /* ---- GOL/ASSIST ---- */
+    .ga-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+    .ga-kpi{background:#fff;border:0.5px solid #eee;border-radius:10px;padding:14px 8px;text-align:center}
+    .ga-kpi-v{display:block;font-size:20px;font-weight:700;color:#111;line-height:1}
+    .ga-kpi-l{display:block;font-size:10px;color:#B0A9A4;letter-spacing:.04em;text-transform:uppercase;margin-top:5px}
+    .ga-kpi-sub{display:block;font-size:11px;color:#8B0000;font-weight:600;margin-top:3px}
+    .ga-min{text-align:center}
+    .ga-gol{color:#1565C0;font-weight:700;text-align:center}
+    .ga-assist{color:#C79000;font-weight:700;text-align:center}
+    .ga-somma{font-weight:700;text-align:center}
+    .ga-rate{color:#8E8E96;font-size:12.5px;text-align:center}
+    .ga-dash{color:#D8D0CC;text-align:center}
+
+    /* ---- CARTELLINI ---- */
+    .cc-card{display:inline-flex;align-items:center;justify-content:center;width:15px;height:20px;border-radius:2px;margin-right:2px;vertical-align:middle}
+    .cc-y{background:#FFC107}
+    .cc-r{background:#D32F2F}
+    .cc-count{font-weight:700;margin-left:4px;font-size:14px}
+    .cc-tot{font-weight:700;text-align:center}
+    .cc-rate{color:#8E8E96;font-size:12.5px;text-align:center}
+    .cc-dash{color:#D8D0CC;text-align:center}
+    .cc-diffida{display:inline-block;font-size:10.5px;font-weight:700;color:#8a5a00;background:#FFF3D6;padding:3px 8px;border-radius:100px;white-space:nowrap}
     </style>
 
     <div id="rn-dash">
-      <div class="rnd-tabs">
-        <button class="rnd-tab active" onclick="rndView('g',this)">Giocatori</button>
-        <button class="rnd-tab" onclick="rndView('min',this)">Minutaggi</button>
-        <button class="rnd-tab" onclick="rndView('pag',this)">Pagelle</button>
-        <button class="rnd-tab" onclick="rndView('s',this)">Squadra</button>
+      <div class="rnd-tabs-wrap">
+        <div class="rnd-tabs">
+          <button class="rnd-tab active" onclick="rndView('g',this)">Rosa</button>
+          <button class="rnd-tab" onclick="rndView('ga',this)">Gol/Assist</button>
+          <button class="rnd-tab" onclick="rndView('cc',this)">Cartellini</button>
+          <button class="rnd-tab" onclick="rndView('min',this)">Minutaggi</button>
+          <button class="rnd-tab" onclick="rndView('pag',this)">Pagelle</button>
+          <button class="rnd-tab" onclick="rndView('s',this)">Squadra</button>
+        </div>
+      </div>
+      <div class="rnd-tabs-dots" id="rnd-tabs-dots">
+        <div class="rnd-dot on" data-view="g"></div>
+        <div class="rnd-dot" data-view="ga"></div>
+        <div class="rnd-dot" data-view="cc"></div>
+        <div class="rnd-dot" data-view="min"></div>
+        <div class="rnd-dot" data-view="pag"></div>
+        <div class="rnd-dot" data-view="s"></div>
       </div>
       <div class="rnd-comp-row" id="rnd-comp-row">
         <button class="rnd-comp active" onclick="rndToggleComp('campionato',this)">Campionato</button>
@@ -498,6 +541,12 @@ function reggina_dashboard_shortcode() {
       <!-- PAGELLE -->
       <div id="rnd-vpag" hidden></div>
 
+      <!-- GOL/ASSIST -->
+      <div id="rnd-vga" hidden></div>
+
+      <!-- CARTELLINI -->
+      <div id="rnd-vcc" hidden></div>
+
       <!-- SQUADRA -->
       <div id="rnd-vs" hidden><div class="rnd-loading">Caricamento...</div></div>
     </div>
@@ -513,7 +562,7 @@ function reggina_dashboard_shortcode() {
       let rosaData=[], calData=[], detData=[];
       let selezionate=new Set(['campionato']);
       let currentView='g';
-      let allP=[], matches=[], fasce=[], curF='tutti', curS='', minDone=false, pagDone=false, squadraDone=false;
+      let allP=[], matches=[], fasce=[], curF='tutti', curS='', minDone=false, pagDone=false, gaDone=false, ccDone=false, squadraDone=false;
 
       const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
       const num=v=>{const n=parseInt(v);return isNaN(n)?0:n;};
@@ -717,9 +766,11 @@ function reggina_dashboard_shortcode() {
         if(openPlayerId!==null && allP[openPlayerId]){
           document.getElementById('rnd-dw').innerHTML=buildDettaglioHtml(allP[openPlayerId]);
         }
-        minDone=false; pagDone=false; squadraDone=false;
+        minDone=false; pagDone=false; gaDone=false; ccDone=false; squadraDone=false;
         if(currentView==='min'){minDone=true; renderMin();}
         if(currentView==='pag'){pagDone=true; renderPag();}
+        if(currentView==='ga'){gaDone=true; renderGolAssist();}
+        if(currentView==='cc'){ccDone=true; renderCartellini();}
         if(currentView==='s'){squadraDone=true; renderSquadra();}
       }
 
@@ -731,7 +782,7 @@ function reggina_dashboard_shortcode() {
         document.getElementById('rnd-grid').innerHTML=s.map(p=>{
           const ip=p.ruolo==='portiere';
           const s2=ip?{v:p.golSub,l:'Gol sub',c:'r'}:{v:p.gol,l:'Gol',c:p.gol>0?'r':''};
-          const s3=ip?{v:p.cs,l:'Clean sh.',c:'g'}:{v:p.assist,l:'Assist',c:''};
+          const s3=ip?{v:p.cs,l:'Clean sheet',c:'g'}:{v:p.assist,l:'Assist',c:''};
           return '<div class="rnd-pcard" onclick="rndOpen('+p.id+')" data-ruolo="'+p.ruolo+'" data-nome="'+(p.cognome+' '+p.nome).toLowerCase()+'">'+
             '<div class="rnd-pcard-header"><div class="rnd-pcard-num">'+(p.maglia||'—')+'</div><div class="rnd-pcard-sep"></div>'+
             '<div class="rnd-pcard-names"><div class="rnd-pcard-fn">'+p.nome+'</div><div class="rnd-pcard-sn">'+p.cognome+'</div>'+
@@ -843,7 +894,7 @@ function reggina_dashboard_shortcode() {
           return mb-ma;
         });
 
-        let h='<p class="dv-note">Ordinati per minuti totali. Ogni cella è una giornata: più il colore è intenso, più minuti ha giocato.</p>'+
+        let h='<p class="dv-note">Calciatori odinati per minuti totali. Ogni cella è una giornata: più il colore è intenso, più minuti ha giocato.</p>'+
           '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl"><thead><tr>'+
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="hm-tot dv-hd">Minuti</th>';
@@ -886,7 +937,7 @@ function reggina_dashboard_shortcode() {
         const avvMap={};
         matches.forEach(m=>{ avvMap[m._key]=(m.avversario||'').trim(); });
 
-        let h='<p class="dv-note">Ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
+        let h='<p class="dv-note">Calciatori ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
           '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl pg-tbl"><thead><tr>'+
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="pg-med dv-hd">Media</th>'+
@@ -932,6 +983,142 @@ function reggina_dashboard_shortcode() {
         document.getElementById('rnd-vpag').innerHTML=h;
       }
 
+      /* ---------- GOL/ASSIST ---------- */
+      function renderGolAssist(){
+        // Solo giocatori di movimento: per un portiere gol/assist non è
+        // la statistica rilevante, e finirebbe comunque sempre a zero.
+        const giocatori=allP.filter(p=>p.ruolo!=='portiere');
+
+        if(!giocatori.length||!matches.length){
+          document.getElementById('rnd-vga').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">Gol e assist compariranno dopo la prima partita.</div></div>';
+          return;
+        }
+
+        const totGol=giocatori.reduce((s,p)=>s+p.gol,0);
+        const totAssist=giocatori.reduce((s,p)=>s+p.assist,0);
+
+        // Se più giocatori sono a pari merito, li elenchiamo tutti invece
+        // di mostrarne uno a caso.
+        const maxGol=Math.max(0,...giocatori.map(p=>p.gol));
+        const migliorMarcatori=giocatori.filter(p=>maxGol>0&&p.gol===maxGol);
+        const maxAssist=Math.max(0,...giocatori.map(p=>p.assist));
+        const migliorAssistman=giocatori.filter(p=>maxAssist>0&&p.assist===maxAssist);
+
+        let h='<p class="dv-note">Calciatori ordinati per contributo totale (gol + assist).</p>';
+
+        h+='<div class="ga-kpi-row">';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v" style="color:#1565C0">'+maxGol+'</span><span class="ga-kpi-l">Miglior marcatore</span>'+
+           (migliorMarcatori.length?'<span class="ga-kpi-sub">'+migliorMarcatori.map(p=>p.cognome).join(', ')+'</span>':'')+'</div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v" style="color:#C79000">'+maxAssist+'</span><span class="ga-kpi-l">Miglior assist-man</span>'+
+           (migliorAssistman.length?'<span class="ga-kpi-sub">'+migliorAssistman.map(p=>p.cognome).join(', ')+'</span>':'')+'</div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totGol)+'</span><span class="ga-kpi-l">Gol totali squadra</span></div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totAssist)+'</span><span class="ga-kpi-l">Assist totali squadra</span></div>';
+        h+='</div>';
+
+        const sorted=[...giocatori].sort((a,b)=>(b.gol+b.assist)-(a.gol+a.assist));
+
+        h+='<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl"><thead><tr>'+
+          '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
+          '<th class="dv-hd">Minuti</th>'+
+          '<th class="dv-hd">Gol</th>'+
+          '<th class="dv-hd">Assist</th>'+
+          '<th class="dv-hd">G+A</th>'+
+          '<th class="dv-hd">Un gol ogni</th>'+
+          '<th class="dv-hd">Un assist ogni</th>'+
+          '</tr></thead><tbody>';
+
+        sorted.forEach(p=>{
+          const ga=p.gol+p.assist;
+          const rateGol=p.gol>0?fmt(Math.round(p.minuti/p.gol))+"&#8242;":'—';
+          const rateAssist=p.assist>0?fmt(Math.round(p.minuti/p.assist))+"&#8242;":'—';
+          h+='<tr><td class="dv-nm"><div class="dv-nm-s">'+p.cognome+'</div><div class="dv-nm-r">'+p.nome+'</div></td>'+
+             '<td class="ga-min">'+fmt(p.minuti)+"&#8242;</td>"+
+             '<td class="'+(p.gol>0?'ga-gol':'ga-dash')+'">'+fmt(p.gol)+'</td>'+
+             '<td class="'+(p.assist>0?'ga-assist':'ga-dash')+'">'+fmt(p.assist)+'</td>'+
+             '<td class="'+(ga>0?'ga-somma':'ga-dash')+'">'+fmt(ga)+'</td>'+
+             '<td class="'+(p.gol>0?'ga-rate':'ga-dash')+'">'+rateGol+'</td>'+
+             '<td class="'+(p.assist>0?'ga-rate':'ga-dash')+'">'+rateAssist+'</td>'+
+             '</tr>';
+        });
+
+        h+='</tbody></table></div></div>';
+        document.getElementById('rnd-vga').innerHTML=h;
+      }
+
+      /* ---------- CARTELLINI ----------
+         Regola Serie D (art.19 comma 9 Codice di Giustizia Sportiva):
+         squalifica alla 5ª ammonizione, poi in caso di recidiva alla
+         10ª, 14ª, 17ª, 19ª, e da lì in poi ad ogni ammonizione
+         successiva. "In diffida" = manca un solo cartellino alla
+         prossima soglia. Vale solo per i gialli, non per i rossi
+         (l'espulsione diretta è già di per sé una squalifica). */
+      function prossimaSogliaDiffida(gialli){
+        const soglie=[5,10,14,17,19];
+        for(const s of soglie){ if(gialli<s) return s; }
+        return gialli+1;
+      }
+
+      function renderCartellini(){
+        const giocatori=allP.filter(p=>p.ruolo!=='portiere'||p.amm>0||p.esp>0);
+
+        if(!giocatori.length||!matches.length){
+          document.getElementById('rnd-vcc').innerHTML='<div class="rnd-empty"><div class="rnd-empty-t">Nessun dato disponibile</div><div class="rnd-empty-b">I cartellini compariranno dopo la prima partita.</div></div>';
+          return;
+        }
+
+        const totGialli=giocatori.reduce((s,p)=>s+p.amm,0);
+        const totRossi=giocatori.reduce((s,p)=>s+p.esp,0);
+        const inDiffida=giocatori.filter(p=>p.amm>0&&(prossimaSogliaDiffida(p.amm)-p.amm)===1);
+        const maxAmm=Math.max(0,...giocatori.map(p=>p.amm));
+        const piuAmmonitiTutti=giocatori.filter(p=>maxAmm>0&&p.amm===maxAmm);
+
+        let h='<p class="dv-note">Calciatori ordinati per numero totale di cartellini.</p>';
+
+        h+='<div class="ga-kpi-row">';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+maxAmm+'</span><span class="ga-kpi-l">Più ammonito</span>'+
+           (piuAmmonitiTutti.length?'<span class="ga-kpi-sub">'+piuAmmonitiTutti.map(p=>p.cognome).join(', ')+'</span>':'')+'</div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totGialli)+'</span><span class="ga-kpi-l">Gialli totali squadra</span></div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totRossi)+'</span><span class="ga-kpi-l">Rossi totali squadra</span></div>';
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+inDiffida.length+'</span><span class="ga-kpi-l">Giocatori in diffida</span>'+
+           '<span class="ga-kpi-sub" style="color:#8a5a00">a un giallo dalla squalifica</span></div>';
+        h+='</div>';
+
+        const sorted=[...giocatori].sort((a,b)=>(b.amm+b.esp)-(a.amm+a.esp));
+
+        h+='<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl"><thead><tr>'+
+          '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
+          '<th class="dv-hd">Presenze</th>'+
+          '<th class="dv-hd">Cartellini</th>'+
+          '<th class="dv-hd">Totale</th>'+
+          '<th class="dv-hd">Uno ogni</th>'+
+          '<th class="dv-hd">Rischio</th>'+
+          '</tr></thead><tbody>';
+
+        sorted.forEach(p=>{
+          const tot=p.amm+p.esp;
+          const rate=tot>0?fmt(Math.round(p.minuti/tot))+"&#8242;":'—';
+          const mancano=p.amm>0?prossimaSogliaDiffida(p.amm)-p.amm:null;
+
+          let cartelliniHtml='<span class="cc-dash">—</span>';
+          if(tot>0){
+            cartelliniHtml='';
+            if(p.amm>0) cartelliniHtml+='<span class="cc-card cc-y"></span><span class="cc-count">'+p.amm+'</span>';
+            if(p.esp>0) cartelliniHtml+=' <span class="cc-card cc-r"></span><span class="cc-count">'+p.esp+'</span>';
+          }
+
+          h+='<tr><td class="dv-nm"><div class="dv-nm-s">'+p.cognome+'</div><div class="dv-nm-r">'+p.nome+'</div></td>'+
+             '<td style="text-align:center">'+fmt(p.presenze)+'</td>'+
+             '<td style="text-align:center">'+cartelliniHtml+'</td>'+
+             '<td class="'+(tot>0?'cc-tot':'cc-dash')+'">'+fmt(tot)+'</td>'+
+             '<td class="'+(tot>0?'cc-rate':'cc-dash')+'">'+rate+'</td>'+
+             '<td style="text-align:center">'+(mancano===1?'<span class="cc-diffida">⚠ In diffida</span>':'<span class="cc-dash">—</span>')+'</td>'+
+             '</tr>';
+        });
+
+        h+='</tbody></table></div></div>';
+        document.getElementById('rnd-vcc').innerHTML=h;
+      }
+
       /* ---------- SQUADRA ---------- */
       function renderSquadra(){
         if(!matches.length){
@@ -947,7 +1134,7 @@ function reggina_dashboard_shortcode() {
         // essendo a eliminazione diretta in Serie D, non assegna punti.
         const soloCampionato = selezionate.size===1 && selezionate.has('campionato');
 
-        let mediaPuntiHtml='', lab=[], dS=[], dM=[];
+        let mediaPuntiHtml='', distaccoHtml='', lab=[], dS=[], dM=[], dD=[], dP=[];
         if(soloCampionato){
           let tp=0,pc=0,pt=0,nc=0,nt=0,n=0; const seq=[];
           matches.forEach(r=>{
@@ -958,6 +1145,12 @@ function reggina_dashboard_shortcode() {
             dS.push(+(tp/n).toFixed(2));
             dM.push(seq.length>=5?+(seq.slice(-5).reduce((a,b)=>a+b,0)/5).toFixed(2):null);
             lab.push(labelPartita(r._comp,r._numCampionato,'G'));
+            const dist=String(r['distacco dalla vetta']||'').trim();
+            const distNum=dist===''?null:parseInt(dist.replace(/[^\-\d]/g,''),10);
+            dD.push(isNaN(distNum)?null:distNum);
+            const pos=String(r['posizione in classifica']||'').trim();
+            const posNum=pos===''?null:parseInt(pos.replace(/[^\d]/g,''),10);
+            dP.push(isNaN(posNum)?null:posNum);
           });
           const mT=n>0?tp/n:0,mC=nc>0?pc/nc:0,mTr=nt>0?pt/nt:0;
 
@@ -970,6 +1163,10 @@ function reggina_dashboard_shortcode() {
             '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci1"><canvas id="rnd-c1"></canvas></div></div>'+
             '<div class="rnd-stitle">Media mobile (ultime 5)</div>'+
             '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci2"><canvas id="rnd-c2"></canvas></div></div></div>';
+
+          distaccoHtml='<div class="rnd-vs-section"><div class="rnd-stitle-main">Posizione in classifica</div>'+
+            '<div class="rnd-stitle">Giornata per giornata</div>'+
+            '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci8"><canvas id="rnd-c8"></canvas></div></div></div>';
         }
 
         const gfA=matches.map(r=>num(r['GF'])),gsA=matches.map(r=>num(r['GS']));
@@ -1008,6 +1205,8 @@ function reggina_dashboard_shortcode() {
           '<div><div class="rnd-csub">Casa vs Trasferta</div>'+legGol+'<div class="rnd-cinner-sm"><canvas id="rnd-c5"></canvas></div></div>'+
           '</div></div>'+
 
+          distaccoHtml+
+
           (casaSp.length ?
           '<div class="rnd-vs-section"><div class="rnd-stitle-main">Affluenza al Granillo</div>'+
           '<div class="rnd-kpi-row">'+
@@ -1019,11 +1218,51 @@ function reggina_dashboard_shortcode() {
           '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci7"><canvas id="rnd-c7"></canvas></div></div></div>'
           : '');
 
-        if(barW){['rnd-ci1','rnd-ci2','rnd-ci3'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=barW+'px';});}
+        if(barW){['rnd-ci1','rnd-ci2','rnd-ci3','rnd-ci8'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.width=barW+'px';});}
         setTimeout(()=>{document.querySelectorAll('.rnd-cscroll').forEach(el=>{el.scrollLeft=el.scrollWidth;});},150);
 
         const fo={family:'Space Grotesk',size:10};
-        const axMP={x:{grid:{display:false},ticks:{font:fo,color:'#bbb',maxRotation:0}},y:{grid:{color:'#f5f5f5'},ticks:{font:fo,color:'#bbb',stepSize:0.5},beginAtZero:true,max:3.5}};
+        const axMP={x:{grid:{display:false},ticks:{font:fo,color:'#bbb',maxRotation:0}},y:{grid:{color:'#f5f5f5'},ticks:{font:fo,color:'#bbb',stepSize:0.5},beginAtZero:true,max:3}};
+        const TOT_SQUADRE=18;
+        const axPos={
+          x:{grid:{display:false},ticks:{font:fo,color:'#bbb',maxRotation:0}},
+          y:{reverse:true,min:0.5,max:TOT_SQUADRE+0.5,grid:{color:'#f5f5f5'},ticks:{font:fo,color:'#bbb',autoSkip:false},afterBuildTicks:axis=>{axis.ticks=Array.from({length:TOT_SQUADRE},(_,i)=>({value:i+1}));}}
+        };
+        // Fasce colorate di sfondo, stesse identiche soglie della pagina Classifica.
+        const zonePlugin={
+          id:'rndZonePos',
+          beforeDraw(chart){
+            const {ctx,chartArea,scales}=chart;
+            if(!chartArea||!scales.y)return;
+            const y=scales.y, tot=TOT_SQUADRE;
+            const zone=[
+              {a:1,b:1,c:'rgba(40,167,69,.14)'},
+              {a:2,b:5,c:'rgba(0,123,255,.08)'},
+              {a:tot-5,b:tot-2,c:'rgba(255,193,7,.13)'},
+              {a:tot-1,b:tot,c:'rgba(220,53,69,.11)'}
+            ];
+            zone.forEach(z=>{
+              const y1=y.getPixelForValue(z.a-0.5), y2=y.getPixelForValue(z.b+0.5);
+              ctx.save();
+              ctx.fillStyle=z.c;
+              ctx.fillRect(chartArea.left,Math.min(y1,y2),chartArea.right-chartArea.left,Math.abs(y2-y1));
+              ctx.restore();
+            });
+          }
+        };
+        const dlPos={
+          anchor:'end',align:'top',offset:6,
+          backgroundColor:(ctx)=>dP[ctx.dataIndex]===1?'#1a7a3a':'#8B0000',
+          borderRadius:4,color:'#fff',padding:{top:3,bottom:3,left:5,right:5},
+          font:{family:'Space Grotesk',size:10,weight:'600'},
+          formatter:(v,ctx)=>{
+            const p=dP[ctx.dataIndex]; if(p===null||p===undefined)return'';
+            if(p===1)return'1°';
+            const d=dD[ctx.dataIndex];
+            return (d!==null&&d>0)?('+'+d):(p+'°');
+          }
+        };
+        const optPos={responsive:true,maintainAspectRatio:false,layout:{padding:{top:26}},plugins:{legend:{display:false},datalabels:dlPos},scales:axPos};
         const axBar={x:{grid:{display:false},ticks:{font:fo,color:'#666'}},y:{grid:{color:'#f5f5f5'},ticks:{font:fo,color:'#bbb',stepSize:1},beginAtZero:true}};
         const ls={borderColor:'#8B0000',backgroundColor:'rgba(139,0,0,0.06)',borderWidth:2,fill:true,tension:0.3,pointRadius:4,pointBackgroundColor:'#8B0000'};
         const dlLine={anchor:'end',align:'top',offset:6,backgroundColor:'#8B0000',borderRadius:4,color:'#fff',padding:{top:3,bottom:3,left:5,right:5},font:{family:'Space Grotesk',size:10,weight:'600'},formatter:v=>v!==null?String(v).replace('.',','):''};
@@ -1034,6 +1273,7 @@ function reggina_dashboard_shortcode() {
         if(soloCampionato){
           new Chart(document.getElementById('rnd-c1'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dS})]},options:optLine});
           new Chart(document.getElementById('rnd-c2'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dM})]},options:optLine});
+          new Chart(document.getElementById('rnd-c8'),{type:'line',data:{labels:lab,datasets:[Object.assign({},ls,{data:dP,spanGaps:true})]},options:optPos,plugins:[zonePlugin]});
         }
 
         new Chart(document.getElementById('rnd-c3'),{type:'bar',data:{labels:labG,datasets:[
@@ -1091,12 +1331,18 @@ function reggina_dashboard_shortcode() {
         currentView=v;
         document.querySelectorAll('.rnd-tab').forEach(t=>t.classList.remove('active'));
         btn.classList.add('active');
+        btn.scrollIntoView({behavior:'smooth', inline:'start', block:'nearest'});
+        document.querySelectorAll('.rnd-dot').forEach(d=>d.classList.toggle('on', d.dataset.view===v));
         document.getElementById('rnd-vg').hidden=v!=='g';
         document.getElementById('rnd-vmin').hidden=v!=='min';
         document.getElementById('rnd-vpag').hidden=v!=='pag';
+        document.getElementById('rnd-vga').hidden=v!=='ga';
+        document.getElementById('rnd-vcc').hidden=v!=='cc';
         document.getElementById('rnd-vs').hidden=v!=='s';
         if(v==='min'&&!minDone){minDone=true;renderMin();}
         if(v==='pag'&&!pagDone){pagDone=true;renderPag();}
+        if(v==='ga'&&!gaDone){gaDone=true;renderGolAssist();}
+        if(v==='cc'&&!ccDone){ccDone=true;renderCartellini();}
         if(v==='s'&&!squadraDone){squadraDone=true;renderSquadra();}
       };
 
@@ -1917,7 +2163,7 @@ function reggina_header_compatto() {
       }
       .rnh-logo { font-size: 30px; gap: 3px; }
       .rnh-nav {
-        font-size: 13px; gap: 17px;
+        font-size: 15px; gap: 17px;
         position: static; background: none; border: none; padding: 0;
       }
       /* "Chi siamo" toglierebbe spazio: su mobile sta solo nel pannello */
@@ -1966,11 +2212,11 @@ function reggina_header_compatto() {
       .rnh-panel > a {
         padding: 13px 0; border-bottom: 1px solid #f0ece8;
         color: #222; text-decoration: none !important;
-        font-weight: 700; font-size: 15.5px;
+        font-weight: 700; font-size: 17px;
       }
       .rnh-panel-k {
         padding: 16px 0 5px;
-        font-size: 11px; font-weight: 700; letter-spacing: .1em;
+        font-size: 13px; font-weight: 700; letter-spacing: .1em;
         text-transform: uppercase; color: #a9a29c;
       }
       .rnh-panel .rnh-panel-sub {
@@ -2877,3 +3123,54 @@ function reggina_footer_legal_links() {
     <?php
 }
 add_action( 'wp_footer', 'reggina_footer_legal_links', 100 );
+
+/*	-----------------------------------------------------------------------------------------------
+	FRECCIA "TORNA SU" — su tutte le pagine e gli articoli, compare quando
+	si scorre in basso e riporta in cima con un click.
+--------------------------------------------------------------------------------------------------- */
+
+function reggina_back_to_top() {
+    ?>
+    <button id="rn-back-top" aria-label="Torna su" title="Torna su">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+    </button>
+    <style>
+    #rn-back-top{
+      position:fixed; right:20px; bottom:20px; z-index:9990;
+      width:46px; height:46px; border-radius:50%;
+      background:#8B0000; border:none; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 14px rgba(0,0,0,.22);
+      opacity:0; visibility:hidden; transform:translateY(10px);
+      transition:opacity .25s, transform .25s, visibility .25s, background .15s;
+    }
+    #rn-back-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
+    #rn-back-top:hover{ background:#A50E2D; }
+    #rn-back-top svg{ width:20px; height:20px; }
+    @media(max-width:600px){
+      #rn-back-top{ right:14px; bottom:14px; width:42px; height:42px; }
+      #rn-back-top svg{ width:18px; height:18px; }
+    }
+    @media(prefers-reduced-motion:reduce){
+      #rn-back-top{ transition:opacity .01s, visibility .01s; }
+    }
+    </style>
+    <script>
+    (function(){
+      var btn=document.getElementById('rn-back-top');
+      if(!btn) return;
+      var soglia=400;
+      function controlla(){
+        if((window.scrollY||window.pageYOffset) > soglia) btn.classList.add('show');
+        else btn.classList.remove('show');
+      }
+      window.addEventListener('scroll', controlla, {passive:true});
+      controlla();
+      btn.addEventListener('click', function(){
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+    })();
+    </script>
+    <?php
+}
+add_action( 'wp_footer', 'reggina_back_to_top' );
