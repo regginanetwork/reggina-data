@@ -377,17 +377,17 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "97",
-  "nome": "Filippo",
-  "cognome": "Toscano",
-  "ruolo": "centrocampista",
-  "under/over": "under (2008)",
-  "data di nascita": "23/06/2008",
-  "età": "18,2",
-  "tipologia contratto": "in prestito",
+  "numero maglia": "4",
+  "nome": "Marco",
+  "cognome": "Baldan",
+  "ruolo": "difensore",
+  "under/over": "over",
+  "data di nascita": "13/11/1993",
+  "età": "32,8",
+  "tipologia contratto": "acquisto definitivo",
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/filippo-toscano/profil/spieler/1314288"
+  "transfermarkt": "https://www.transfermarkt.it/marco-baldan/profil/spieler/160322"
  },
  {
   "numero maglia": "",
@@ -442,6 +442,19 @@
   "transfermarkt": ""
  },
  {
+  "numero maglia": "97",
+  "nome": "Filippo",
+  "cognome": "Toscano",
+  "ruolo": "centrocampista",
+  "under/over": "under (2008)",
+  "data di nascita": "23/06/2008",
+  "età": "18,2",
+  "tipologia contratto": "in prestito",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/filippo-toscano/profil/spieler/1314288"
+ },
+ {
   "numero maglia": "44",
   "nome": "Stefano",
   "cognome": "Specker",
@@ -466,19 +479,6 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/andrea-palmieri/profil/spieler/1309919"
- },
- {
-  "numero maglia": "99",
-  "nome": "Agostino",
-  "cognome": "Macrì",
-  "ruolo": "centrocampista",
-  "under/over": "under (2008)",
-  "data di nascita": "27/03/2008",
-  "età": "18,5",
-  "tipologia contratto": "acquisto definitivo",
-  "scadenza contratto": "30/06/2027",
-  "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/agostino-macri/profil/spieler/1483488"
  },
  {
   "numero maglia": "",
@@ -533,17 +533,17 @@
   "transfermarkt": ""
  },
  {
-  "numero maglia": "7",
-  "nome": "Federico",
-  "cognome": "Baggi",
+  "numero maglia": "99",
+  "nome": "Agostino",
+  "cognome": "Macrì",
   "ruolo": "centrocampista",
-  "under/over": "over",
-  "data di nascita": "10/09/2003",
-  "età": "23",
+  "under/over": "under (2008)",
+  "data di nascita": "27/03/2008",
+  "età": "18,5",
   "tipologia contratto": "acquisto definitivo",
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/federico-baggi/leistungsdatendetails/spieler/806504"
+  "transfermarkt": "https://www.transfermarkt.it/agostino-macri/profil/spieler/1483488"
  },
  {
   "numero maglia": "",
@@ -570,6 +570,19 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "no",
   "transfermarkt": ""
+ },
+ {
+  "numero maglia": "7",
+  "nome": "Federico",
+  "cognome": "Baggi",
+  "ruolo": "centrocampista",
+  "under/over": "over",
+  "data di nascita": "10/09/2003",
+  "età": "23",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/federico-baggi/leistungsdatendetails/spieler/806504"
  },
  {
   "numero maglia": "24",
@@ -611,19 +624,6 @@
   "transfermarkt": "https://www.transfermarkt.it/antonio-porcino/profil/spieler/214537"
  },
  {
-  "numero maglia": "18",
-  "nome": "Mady",
-  "cognome": "Abonckelet",
-  "ruolo": "centrocampista",
-  "under/over": "over",
-  "data di nascita": "16/03/1998",
-  "età": "28,5",
-  "tipologia contratto": "acquisto definitivo",
-  "scadenza contratto": "30/06/2027",
-  "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/mady-abonckelet/profil/spieler/548049"
- },
- {
   "numero maglia": "",
   "nome": "Antonino",
   "cognome": "Pellicanò",
@@ -635,6 +635,19 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "no",
   "transfermarkt": ""
+ },
+ {
+  "numero maglia": "18",
+  "nome": "Mady",
+  "cognome": "Abonckelet",
+  "ruolo": "centrocampista",
+  "under/over": "over",
+  "data di nascita": "16/03/1998",
+  "età": "28,5",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/mady-abonckelet/profil/spieler/548049"
  },
  {
   "numero maglia": "23",
@@ -650,6 +663,19 @@
   "transfermarkt": "https://www.transfermarkt.it/riccardo-rotulo/profil/spieler/479713"
  },
  {
+  "numero maglia": "",
+  "nome": "Andrea",
+  "cognome": "Di Grazia",
+  "ruolo": "attaccante",
+  "under/over": "over",
+  "data di nascita": "08/05/1996",
+  "età": "30,4",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "no",
+  "transfermarkt": "https://www.transfermarkt.it/andrea-di-grazia/profil/spieler/287265"
+ },
+ {
   "numero maglia": "8",
   "nome": "Alberto",
   "cognome": "Acquadro",
@@ -663,17 +689,30 @@
   "transfermarkt": "https://www.transfermarkt.it/alberto-acquadro/profil/spieler/307344"
  },
  {
-  "numero maglia": "",
-  "nome": "Andrea",
-  "cognome": "Di Grazia",
-  "ruolo": "attaccante",
+  "numero maglia": "38",
+  "nome": "Matteo",
+  "cognome": "Rossetti",
+  "ruolo": "centrocampista",
   "under/over": "over",
-  "data di nascita": "08/05/1996",
-  "età": "30,4",
+  "data di nascita": "23/07/1998",
+  "età": "28,1",
   "tipologia contratto": "acquisto definitivo",
   "scadenza contratto": "30/06/2027",
-  "in rosa": "no",
-  "transfermarkt": "https://www.transfermarkt.it/andrea-di-grazia/profil/spieler/287265"
+  "in rosa": "sì",
+  "transfermarkt": "https://www.transfermarkt.it/matteo-rossetti/profil/spieler/440878"
+ },
+ {
+  "numero maglia": "",
+  "nome": "Lorenzo",
+  "cognome": "Piras",
+  "ruolo": "portiere",
+  "under/over": "under (2006)",
+  "data di nascita": "22/04/2006",
+  "età": "20,4",
+  "tipologia contratto": "",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "",
+  "transfermarkt": "https://www.transfermarkt.it/lorenzo-piras/profil/spieler/999271"
  },
  {
   "numero maglia": "10",
@@ -700,19 +739,6 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/giuliano-alma/profil/spieler/443697"
- },
- {
-  "numero maglia": "",
-  "nome": "Lorenzo",
-  "cognome": "Piras",
-  "ruolo": "portiere",
-  "under/over": "under (2006)",
-  "data di nascita": "22/04/2006",
-  "età": "20,4",
-  "tipologia contratto": "",
-  "scadenza contratto": "30/06/2027",
-  "in rosa": "",
-  "transfermarkt": "https://www.transfermarkt.it/lorenzo-piras/profil/spieler/999271"
  },
  {
   "numero maglia": "11",
@@ -765,31 +791,5 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/andrea-magrassi/profil/spieler/175788"
- },
- {
-  "numero maglia": "38",
-  "nome": "Matteo",
-  "cognome": "Rossetti",
-  "ruolo": "centrocampista",
-  "under/over": "over",
-  "data di nascita": "23/07/1998",
-  "età": "28,1",
-  "tipologia contratto": "acquisto definitivo",
-  "scadenza contratto": "30/06/2027",
-  "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/matteo-rossetti/profil/spieler/440878"
- },
- {
-  "numero maglia": "",
-  "nome": "Marco",
-  "cognome": "Baldan",
-  "ruolo": "difensore",
-  "under/over": "over",
-  "data di nascita": "13/11/1993",
-  "età": "32,8",
-  "tipologia contratto": "acquisto definitivo",
-  "scadenza contratto": "30/06/2027",
-  "in rosa": "sì",
-  "transfermarkt": "https://www.transfermarkt.it/marco-baldan/profil/spieler/160322"
  }
 ]
