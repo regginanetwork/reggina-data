@@ -328,7 +328,7 @@ function reggina_dashboard_shortcode() {
     .rnd-ps{text-align:center;min-width:46px}
     .rnd-psv{display:block;font-size:17px;font-weight:600;color:#111}
     .rnd-psv.r{color:#8B0000}.rnd-psv.g{color:#1a7a3a}
-    .rnd-psl{display:block;font-size:11px;color:#888;letter-spacing:0.04em;text-transform:uppercase;margin-top:1px;white-space:nowrap}
+    .rnd-psl{display:block;font-size:11px;color:#888;letter-spacing:0.04em;text-transform:uppercase;margin-top:1px}
     .rnd-pcard-footer{margin-top:10px;padding-top:7px;border-top:0.5px solid #f0f0f0;font-size:13px;font-weight:600;color:#ccc;letter-spacing:0.04em;display:flex;align-items:center;justify-content:flex-end;gap:4px}
     .rnd-pcard:hover .rnd-pcard-footer{color:#8B0000}
     .rnd-farrow{display:inline-block;color:#8B0000;animation:rndArrow 1.4s ease-in-out infinite}
@@ -475,8 +475,8 @@ function reggina_dashboard_shortcode() {
     .ga-kpi-l{display:block;font-size:10px;color:#B0A9A4;letter-spacing:.04em;text-transform:uppercase;margin-top:5px}
     .ga-kpi-sub{display:block;font-size:11px;color:#8B0000;font-weight:600;margin-top:3px}
     .ga-min{text-align:center}
-    .ga-gol{color:#1565C0;font-weight:700;text-align:center}
-    .ga-assist{color:#C79000;font-weight:700;text-align:center}
+    .ga-gol{color:#8B0000;font-weight:700;text-align:center}
+    .ga-assist{color:#1a7a3a;font-weight:700;text-align:center}
     .ga-somma{font-weight:700;text-align:center}
     .ga-rate{color:#8E8E96;font-size:12.5px;text-align:center}
     .ga-dash{color:#D8D0CC;text-align:center}
@@ -495,7 +495,7 @@ function reggina_dashboard_shortcode() {
     <div id="rn-dash">
       <div class="rnd-tabs-wrap">
         <div class="rnd-tabs">
-          <button class="rnd-tab active" onclick="rndView('g',this)">Rosa</button>
+          <button class="rnd-tab active" onclick="rndView('g',this)">Giocatori</button>
           <button class="rnd-tab" onclick="rndView('ga',this)">Gol/Assist</button>
           <button class="rnd-tab" onclick="rndView('cc',this)">Cartellini</button>
           <button class="rnd-tab" onclick="rndView('min',this)">Minutaggi</button>
@@ -782,7 +782,7 @@ function reggina_dashboard_shortcode() {
         document.getElementById('rnd-grid').innerHTML=s.map(p=>{
           const ip=p.ruolo==='portiere';
           const s2=ip?{v:p.golSub,l:'Gol sub',c:'r'}:{v:p.gol,l:'Gol',c:p.gol>0?'r':''};
-          const s3=ip?{v:p.cs,l:'Clean sheet',c:'g'}:{v:p.assist,l:'Assist',c:''};
+          const s3=ip?{v:p.cs,l:'Clean sh.',c:'g'}:{v:p.assist,l:'Assist',c:''};
           return '<div class="rnd-pcard" onclick="rndOpen('+p.id+')" data-ruolo="'+p.ruolo+'" data-nome="'+(p.cognome+' '+p.nome).toLowerCase()+'">'+
             '<div class="rnd-pcard-header"><div class="rnd-pcard-num">'+(p.maglia||'—')+'</div><div class="rnd-pcard-sep"></div>'+
             '<div class="rnd-pcard-names"><div class="rnd-pcard-fn">'+p.nome+'</div><div class="rnd-pcard-sn">'+p.cognome+'</div>'+
@@ -894,7 +894,7 @@ function reggina_dashboard_shortcode() {
           return mb-ma;
         });
 
-        let h='<p class="dv-note">Calciatori odinati per minuti totali. Ogni cella è una giornata: più il colore è intenso, più minuti ha giocato.</p>'+
+        let h='<p class="dv-note">Ordinati per minuti totali. Ogni cella è una giornata: più il colore è intenso, più minuti ha giocato.</p>'+
           '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl"><thead><tr>'+
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="hm-tot dv-hd">Minuti</th>';
@@ -937,7 +937,7 @@ function reggina_dashboard_shortcode() {
         const avvMap={};
         matches.forEach(m=>{ avvMap[m._key]=(m.avversario||'').trim(); });
 
-        let h='<p class="dv-note">Calciatori ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
+        let h='<p class="dv-note">Ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
           '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl pg-tbl"><thead><tr>'+
           '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
           '<th class="pg-med dv-hd">Media</th>'+
@@ -1004,12 +1004,12 @@ function reggina_dashboard_shortcode() {
         const maxAssist=Math.max(0,...giocatori.map(p=>p.assist));
         const migliorAssistman=giocatori.filter(p=>maxAssist>0&&p.assist===maxAssist);
 
-        let h='<p class="dv-note">Calciatori ordinati per contributo totale (gol + assist).</p>';
+        let h='<p class="dv-note">Statistiche riferite alle partite selezionate. Ordinati per contributo totale (gol + assist).</p>';
 
         h+='<div class="ga-kpi-row">';
-        h+='<div class="ga-kpi"><span class="ga-kpi-v" style="color:#1565C0">'+maxGol+'</span><span class="ga-kpi-l">Miglior marcatore</span>'+
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+maxGol+'</span><span class="ga-kpi-l">Miglior marcatore</span>'+
            (migliorMarcatori.length?'<span class="ga-kpi-sub">'+migliorMarcatori.map(p=>p.cognome).join(', ')+'</span>':'')+'</div>';
-        h+='<div class="ga-kpi"><span class="ga-kpi-v" style="color:#C79000">'+maxAssist+'</span><span class="ga-kpi-l">Miglior assist-man</span>'+
+        h+='<div class="ga-kpi"><span class="ga-kpi-v">'+maxAssist+'</span><span class="ga-kpi-l">Miglior assist-man</span>'+
            (migliorAssistman.length?'<span class="ga-kpi-sub">'+migliorAssistman.map(p=>p.cognome).join(', ')+'</span>':'')+'</div>';
         h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totGol)+'</span><span class="ga-kpi-l">Gol totali squadra</span></div>';
         h+='<div class="ga-kpi"><span class="ga-kpi-v">'+fmt(totAssist)+'</span><span class="ga-kpi-l">Assist totali squadra</span></div>';
@@ -1072,7 +1072,7 @@ function reggina_dashboard_shortcode() {
         const maxAmm=Math.max(0,...giocatori.map(p=>p.amm));
         const piuAmmonitiTutti=giocatori.filter(p=>maxAmm>0&&p.amm===maxAmm);
 
-        let h='<p class="dv-note">Calciatori ordinati per numero totale di cartellini.</p>';
+        let h='<p class="dv-note">Statistiche riferite alle partite selezionate. Ordinati per numero totale di cartellini.</p>';
 
         h+='<div class="ga-kpi-row">';
         h+='<div class="ga-kpi"><span class="ga-kpi-v">'+maxAmm+'</span><span class="ga-kpi-l">Più ammonito</span>'+
@@ -1352,6 +1352,28 @@ function reggina_dashboard_shortcode() {
         const mr=curF==='tutti'||c.dataset.ruolo===curF, ms=!curS||c.dataset.nome.indexOf(curS)>-1;
         c.classList.toggle('hidden',!(mr&&ms));});}
     })();
+
+    // Shimmer sul titolo H1 "DatAmaranto" nella pagina
+    (function(){
+      function applicaShimmer() {
+        document.querySelectorAll('h1').forEach(function(h1) {
+          if (h1.dataset.rnShimmer) return;
+          var testo = h1.textContent || '';
+          if (testo.toLowerCase().indexOf('datamaranto') === -1 &&
+              testo.toLowerCase().indexOf('dat amaranto') === -1) return;
+          h1.dataset.rnShimmer = '1';
+          h1.innerHTML = h1.innerHTML.replace(
+            /Dat(Amaranto|amaranto)/,
+            'Dat<span class="rn-amaranto-shimmer">$1</span>'
+          );
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applicaShimmer);
+      } else {
+        applicaShimmer();
+      }
+    })();
     </script>
     <?php
     return ob_get_clean();
@@ -1379,6 +1401,45 @@ function reggina_classifica_shortcode() {
         }
     }
     $loghi_json = wp_json_encode( $loghi );
+
+    // Loghi per le squadre del foglio giornate
+    $loghi_gj  = [];
+    $resp_gj   = wp_remote_get( RN_GITHUB_BASE . 'giornate.json', ['timeout' => 10] );
+    if ( ! is_wp_error( $resp_gj ) && wp_remote_retrieve_response_code( $resp_gj ) === 200 ) {
+        $righe_gj = json_decode( wp_remote_retrieve_body( $resp_gj ), true );
+        if ( is_array( $righe_gj ) ) {
+            $sq_gj = [];
+            foreach ( $righe_gj as $r ) {
+                if ( ! empty( $r['Squadra Casa'] ) )   $sq_gj[] = trim( $r['Squadra Casa'] );
+                if ( ! empty( $r['Squadra Ospite'] ) ) $sq_gj[] = trim( $r['Squadra Ospite'] );
+            }
+            foreach ( array_unique( $sq_gj ) as $sq ) {
+                // Prima prova il nome esatto presente in giornate.json.
+                $url = rn_get_logo_url( $sq );
+
+                // Fallback per nomi con prefisso/sponsor.
+                // Esempio: "DIGIESSE PRAIATORTORA" -> "PRAIATORTORA".
+                // In questo modo viene usata la stessa risoluzione del logo
+                // già usata da calendario/classifica tramite rn_get_logo_url().
+                if ( ! $url ) {
+                    $parti_nome = preg_split( '/\s+/', trim( $sq ) );
+
+                    if ( is_array( $parti_nome ) && count( $parti_nome ) > 1 ) {
+                        array_shift( $parti_nome );
+                        $nome_senza_prefisso = implode( ' ', $parti_nome );
+                        $url = rn_get_logo_url( $nome_senza_prefisso );
+                    }
+                }
+
+                if ( $url ) {
+                    // La chiave resta il nome originale del JSON, così il JS
+                    // trova il logo con LOGHI_GJ[m.casa] / LOGHI_GJ[m.ospite].
+                    $loghi_gj[ $sq ] = $url;
+                }
+            }
+        }
+    }
+    $loghi_gj_json = wp_json_encode( $loghi_gj );
 
     ob_start();
     ?>
@@ -1540,6 +1601,272 @@ function reggina_classifica_shortcode() {
           console.error('Classifica:', e);
           target.innerHTML = '<div style="text-align:center;padding:20px;color:#999;">Dati non disponibili al momento.</div>';
         });
+    })();
+    </script>
+
+    <!-- RISULTATI PER GIORNATA — iniettato dallo shortcode classifica -->
+    <style>
+    #rn-giornate-wrap { font-family: 'Space Grotesk', sans-serif; margin-top: 2.5rem; }
+    #rn-giornate-wrap .rngj-label { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #999; margin: 0 0 0.85rem; }
+    .rngj-nav { display: flex; align-items: center; gap: 6px; margin-bottom: 1.5rem; }
+    .rngj-arrow { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; background: transparent; color: #666; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; padding: 0; font-family: inherit; transition: border-color .1s, color .1s; }
+    .rngj-arrow:hover:not([disabled]) { border-color: #aaa; color: #111; }
+    .rngj-arrow[disabled] { opacity: 0.2; cursor: default; }
+    .rngj-pills { display: flex; gap: 3px; overflow: hidden; flex: 1; }
+    .rngj-pill { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #e8e8e8; background: transparent; color: #888; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 400; flex-shrink: 0; padding: 0; font-family: inherit; transition: all .1s; }
+    .rngj-pill:hover { border-color: #bbb; color: #333; }
+    .rngj-pill.rngj-active { background: #8A1626; border-color: #8A1626; color: #fff; font-weight: 600; }
+    .rngj-pill.rngj-futura { color: #ccc; border-color: #f0f0f0; cursor: default; pointer-events: none; }
+    .rngj-header { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 0.85rem; }
+    .rngj-match { display: flex; align-items: center; padding: 9px 12px; border-radius: 8px; border: 1px solid #f0f0f0; margin-bottom: 5px; background: #fff; }
+    .rngj-match:hover { border-color: #e4e4e4; }
+    .rngj-team { flex: 1; display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .rngj-team.rngj-away { flex-direction: row-reverse; }
+    .rngj-team img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+    .rngj-team-ph { width: 22px; height: 22px; flex-shrink: 0; display: inline-block; }
+    .rngj-name { font-size: 13px; font-weight: 400; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rngj-name.rngj-reggina { color: #8A1626; font-weight: 600; }
+    .rngj-score { min-width: 50px; text-align: center; font-size: 14px; font-weight: 600; color: #111; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .rngj-score-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 50px; }
+    .rngj-orario { font-size: 10px; font-weight: 400; color: #aaa; margin-top: 1px; font-variant-numeric: tabular-nums; }
+    .rngj-empty { font-size: 13px; color: #bbb; padding: 0.75rem 0; }
+
+    @media (min-width: 601px) {
+        .rngj-team img { width: 26px; height: 26px; }
+        .rngj-team-ph { width: 26px; height: 26px; }
+        .rngj-name { font-size: 14px; }
+    }
+
+    @media (max-width: 600px) {
+        .rngj-name { font-size: 12px; }
+        .rngj-score { min-width: 40px; font-size: 13px; }
+        .rngj-match { padding: 8px; }
+    }
+    </style>
+
+    <div id="rn-giornate-wrap">
+      <p class="rngj-label">Risultati per giornata</p>
+      <div class="rngj-nav">
+        <button class="rngj-arrow" id="rngj-prev" aria-label="Giornata precedente">&#8592;</button>
+        <div class="rngj-pills" id="rngj-pills"></div>
+        <button class="rngj-arrow" id="rngj-next" aria-label="Giornata successiva">&#8594;</button>
+      </div>
+      <p class="rngj-header" id="rngj-header"></p>
+      <div id="rngj-matches"></div>
+    </div>
+
+    <script>
+    (function(){
+        var LOGHI_GJ = <?php echo $loghi_gj_json; ?>;
+        var GJ_URL   = '<?php echo rest_url('rn/v1/data/giornate'); ?>?t=' + Date.now();
+        var TOT      = 34;
+        var giornate = {};
+        var disponibili = []; // tutte le giornate presenti nel JSON, anche future
+        var giocate = [];     // solo le giornate con almeno un risultato
+        var current  = 1;
+
+        function raggruppa(righe) {
+            var mappa = {};
+            righe.forEach(function(r) {
+                var turnoStr = String(r['Turno'] || '').trim().toUpperCase();
+                var num = parseInt(turnoStr, 10);
+
+                if (isNaN(num)) return;
+
+                // 1A-17A = giornate 1-17
+                // 1R-17R = giornate 18-34
+                var fase = turnoStr.charAt(turnoStr.length - 1);
+                if (fase === 'R') {
+                    num = num + 17;
+                }
+
+                if (num < 1) return;
+                if (num > TOT) return;
+
+                if (!mappa[num]) {
+                    mappa[num] = {
+                        data: String(r['Data'] || '').trim(),
+                        partite: []
+                    };
+                }
+
+                mappa[num].partite.push({
+                    casa:   String(r['Squadra Casa']       || '').trim(),
+                    ospite: String(r['Squadra Ospite']     || '').trim(),
+                    gc:     String(r['Gol Squadra Casa']   || '').trim(),
+                    go:     String(r['Gol Squadra Ospite'] || '').trim(),
+                    orario: String(r['Orario']             || '').trim()
+                });
+            });
+            return mappa;
+        }
+
+        function pillsVisibili() {
+            var perPill = 27;
+            var nav = document.getElementById('rngj-pills');
+            var spazio = nav ? nav.offsetWidth : 560;
+            if (spazio < 50) spazio = 560;
+            var max = Math.floor(spazio / perPill);
+            var start = Math.max(1, current - Math.floor(max / 2));
+            var end = start + max - 1;
+            if (end > TOT) { end = TOT; start = Math.max(1, end - max + 1); }
+            var out = [];
+            for (var i = start; i <= end; i++) out.push(i);
+            return out;
+        }
+
+        function logoHtml(nome) {
+            var url = LOGHI_GJ[nome] || '';
+            if (url) return '<img src="' + url + '" alt="' + nome + '" loading="lazy" onerror="this.style.display=\'none\'">';
+            return '<span class="rngj-team-ph"></span>';
+        }
+
+        function nomeVisualizzato(nome) {
+            var chiave = String(nome || '').toLowerCase().trim();
+
+            if (chiave === 'digiesse praiatortora') {
+                return 'PRAIATORTORA';
+            }
+
+            return nome;
+        }
+
+        function renderPills() {
+            var nav = document.getElementById('rngj-pills');
+            nav.innerHTML = '';
+            pillsVisibili().forEach(function(n) {
+                var esisteNelJson = disponibili.indexOf(n) !== -1;
+                var btn = document.createElement('button');
+
+                btn.className = 'rngj-pill' + (n === current ? ' rngj-active' : '') + (esisteNelJson ? '' : ' rngj-futura');
+                btn.textContent = n;
+
+                if (esisteNelJson) {
+                    if (giocate.indexOf(n) === -1) {
+                        btn.title = n + '\u00aa giornata \u2014 programma';
+                    } else {
+                        btn.title = n + '\u00aa giornata';
+                    }
+
+                    (function(num){
+                        btn.onclick = function(){
+                            current = num;
+                            aggiorna();
+                        };
+                    })(n);
+                } else {
+                    btn.title = n + '\u00aa giornata \u2014 dati non disponibili';
+                }
+
+                nav.appendChild(btn);
+            });
+            var prev = document.getElementById('rngj-prev');
+            var next = document.getElementById('rngj-next');
+            if (current <= 1) prev.setAttribute('disabled',''); else prev.removeAttribute('disabled');
+            if (current >= TOT) next.setAttribute('disabled',''); else next.removeAttribute('disabled');
+        }
+
+        function renderMatches() {
+            var g      = giornate[current];
+            var header = document.getElementById('rngj-header');
+            var box    = document.getElementById('rngj-matches');
+            box.innerHTML = '';
+            if (!g) {
+                header.textContent = current + '\u00aa giornata';
+                var msg = document.createElement('p');
+                msg.className = 'rngj-empty';
+                msg.textContent = 'Risultati non ancora disponibili.';
+                box.appendChild(msg);
+                return;
+            }
+            header.textContent = current + '\u00aa giornata \u00b7 ' + g.data;
+            g.partite.forEach(function(m) {
+                var rC = m.casa.toLowerCase().indexOf('reggina') > -1;
+                var rO = m.ospite.toLowerCase().indexOf('reggina') > -1;
+                var row = document.createElement('div');
+                row.className = 'rngj-match';
+                var haRisultato = m.gc !== '' && m.go !== '';
+                var scoreHtml = haRisultato
+                    ? m.gc + '\u2013' + m.go
+                    : '\u2013';
+             var orarioHtml = m.orario
+                    ? '<span class="rngj-orario">⌚ ' + m.orario + '</span>'
+                    : '';
+                row.innerHTML =
+                    '<div class="rngj-team">' + logoHtml(m.casa) +
+                    '<span class="rngj-name' + (rC ? ' rngj-reggina' : '') + '">' + nomeVisualizzato(m.casa) + '</span></div>' +
+                    '<div class="rngj-score-wrap"><span class="rngj-score">' + scoreHtml + '</span>' + orarioHtml + '</div>' +
+                    '<div class="rngj-team rngj-away">' + logoHtml(m.ospite) +
+                    '<span class="rngj-name' + (rO ? ' rngj-reggina' : '') + '">' + nomeVisualizzato(m.ospite) + '</span></div>';
+                box.appendChild(row);
+            });
+        }
+
+        function aggiorna() { renderPills(); renderMatches(); }
+
+        document.getElementById('rngj-prev').onclick = function() {
+            if (current > 1) { current--; aggiorna(); }
+        };
+        document.getElementById('rngj-next').onclick = function() {
+            if (current < TOT) { current++; aggiorna(); }
+        };
+
+        fetch(GJ_URL)
+            .then(function(r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(function(righe) {
+                giornate = raggruppa(righe);
+
+                // Tutte le giornate presenti nel JSON restano navigabili,
+                // comprese quelle future senza risultato.
+                disponibili = Object.keys(giornate)
+                    .map(Number)
+                    .sort(function(a,b){ return a-b; });
+
+                // Separatamente individua le giornate già giocate:
+                // servono soltanto per scegliere quella da mostrare all'apertura.
+                giocate = disponibili.filter(function(n) {
+                    var g = giornate[n];
+                    if (!g) return false;
+
+                    var partite = g.partite;
+                    if (!partite) return false;
+
+                    for (var i = 0; i < partite.length; i++) {
+                        var haGolCasa = partite[i].gc !== '';
+                        var haGolOspite = partite[i].go !== '';
+
+                        if (haGolCasa) {
+                            if (haGolOspite) {
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
+                });
+
+                // All'apertura resta selezionata l'ultima giornata realmente giocata.
+                if (giocate.length) {
+                    current = giocate[giocate.length - 1];
+                } else if (disponibili.length) {
+                    current = disponibili[0];
+                } else {
+                    current = 1;
+                }
+
+                aggiorna();
+            })
+            .catch(function(err) {
+                console.error('Risultati per giornata:', err);
+
+                var wrap = document.getElementById('rn-giornate-wrap');
+                if (wrap) {
+                    wrap.innerHTML = '<p style="color:#bbb;font-size:13px;">Risultati non disponibili al momento.</p>';
+                }
+            });
     })();
     </script>
     <?php
@@ -2001,7 +2328,7 @@ function reggina_header_compatto() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
           </button>
           <div class="rnh-drop-m">
-            <a href="<?php echo esc_url( $home ); ?>classifica/">Classifica</a>
+            <a href="<?php echo esc_url( $home ); ?>classifica/">Classifica e risultati</a>
             <a href="<?php echo esc_url( $home ); ?>calendario/">Calendario</a>
             <a href="<?php echo esc_url( $home ); ?>amaranto-starter-pack/dove-seguire-le-partite-della-reggina/">Dove vedere le partite</a>
             <a href="<?php echo esc_url( $home ); ?>rosa/">Rosa</a>
@@ -2038,7 +2365,7 @@ function reggina_header_compatto() {
       <div class="rnh-panel" id="rnh-panel">
         <a href="<?php echo esc_url( $home ); ?>">Home</a>
         <span class="rnh-panel-k">RN Starter Pack</span>
-        <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>classifica/">Classifica</a>
+        <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>classifica/">Classifica e risultati</a>
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>calendario/">Calendario</a>
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>amaranto-starter-pack/dove-seguire-le-partite-della-reggina/">Dove vedere le partite</a>
         <a class="rnh-panel-sub" href="<?php echo esc_url( $home ); ?>rosa/">Rosa</a>
@@ -3023,6 +3350,7 @@ function rn_register_api_routes() {
         'classifica'  => 'classifica.json',
         'rosa'        => 'rosa-anagrafica.json',
         'minuti-gol'  => 'minuti-gol.json',
+        'giornate'    => 'giornate.json',
     ];
 
     foreach ( $endpoints as $chiave => $file ) {
@@ -3123,54 +3451,3 @@ function reggina_footer_legal_links() {
     <?php
 }
 add_action( 'wp_footer', 'reggina_footer_legal_links', 100 );
-
-/*	-----------------------------------------------------------------------------------------------
-	FRECCIA "TORNA SU" — su tutte le pagine e gli articoli, compare quando
-	si scorre in basso e riporta in cima con un click.
---------------------------------------------------------------------------------------------------- */
-
-function reggina_back_to_top() {
-    ?>
-    <button id="rn-back-top" aria-label="Torna su" title="Torna su">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
-    </button>
-    <style>
-    #rn-back-top{
-      position:fixed; right:20px; bottom:20px; z-index:9990;
-      width:46px; height:46px; border-radius:50%;
-      background:#8B0000; border:none; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow:0 4px 14px rgba(0,0,0,.22);
-      opacity:0; visibility:hidden; transform:translateY(10px);
-      transition:opacity .25s, transform .25s, visibility .25s, background .15s;
-    }
-    #rn-back-top.show{ opacity:1; visibility:visible; transform:translateY(0); }
-    #rn-back-top:hover{ background:#A50E2D; }
-    #rn-back-top svg{ width:20px; height:20px; }
-    @media(max-width:600px){
-      #rn-back-top{ right:14px; bottom:14px; width:42px; height:42px; }
-      #rn-back-top svg{ width:18px; height:18px; }
-    }
-    @media(prefers-reduced-motion:reduce){
-      #rn-back-top{ transition:opacity .01s, visibility .01s; }
-    }
-    </style>
-    <script>
-    (function(){
-      var btn=document.getElementById('rn-back-top');
-      if(!btn) return;
-      var soglia=400;
-      function controlla(){
-        if((window.scrollY||window.pageYOffset) > soglia) btn.classList.add('show');
-        else btn.classList.remove('show');
-      }
-      window.addEventListener('scroll', controlla, {passive:true});
-      controlla();
-      btn.addEventListener('click', function(){
-        window.scrollTo({top:0, behavior:'smooth'});
-      });
-    })();
-    </script>
-    <?php
-}
-add_action( 'wp_footer', 'reggina_back_to_top' );
