@@ -1178,15 +1178,19 @@ function reggina_dashboard_shortcode() {
 
             let mnHtml = '';
             if (posReggina === 1) {
-              // La Reggina è in testa: calcola il MN rispetto al secondo
-              const seconda = sorted[1];
-              if (seconda) {
-                const ptS  = seconda.punti;
-                const pgS  = seconda.pg;
-                const rimS = TOT_GIORNATE - pgS;
-                const maxS = ptS + 3 * rimS;
+              // La Reggina è in testa: calcola il MN rispetto al secondo posto.
+              // Se più squadre sono a pari punti al secondo posto, si usa il
+              // massimo raggiungibile più alto tra loro (scenario più conservativo).
+              const ptSeconda = sorted[1] ? sorted[1].punti : 0;
+              const seconde = sorted.filter(r =>
+                !r.squadra.toLowerCase().includes('reggina') && r.punti === ptSeconda
+              );
+              if (seconde.length > 0) {
+                // Massimo raggiungibile tra tutte le squadre al secondo posto
+                const maxS = Math.max(...seconde.map(r => r.punti + 3*(TOT_GIORNATE - r.pg)));
                 const mn   = Math.max(0, maxS - ptR + 1);
-                const vantaggio = ptR - ptS;
+                const vantaggio = ptR - ptSeconda;
+                const nomiSeconde = seconde.map(r => r.squadra).join(' e ');
 
                 // Avversarie ancora matematicamente in corsa
                 const inCorsa = clasNorm.filter(r =>
@@ -1199,7 +1203,7 @@ function reggina_dashboard_shortcode() {
                   testoMN = 'La Reggina ha vinto matematicamente il campionato.';
                 } else {
                   testoMN = 'Servono ancora ' + mn + ' punt' + (mn===1?'o':'i') +
-                    ' combinati — fatti dalla Reggina o persi da ' + seconda.squadra +
+                    ' combinati — fatti dalla Reggina o persi da ' + nomiSeconde +
                     ' — per chiudere matematicamente la corsa al titolo.';
                 }
 
@@ -1213,7 +1217,7 @@ function reggina_dashboard_shortcode() {
                   '<div class="rnd-kpi"><span class="rnd-kv">' + inCorsa + '</span><span class="rnd-kl">Squadre in corsa</span></div>' +
                   '</div>' +
                   '<p class="rnd-mn-note">' + testoMN + '</p>' +
-                  '<p class="rnd-mn-sub">Il Magic Number conta i punti combinati — fatti dalla Reggina o persi dalla seconda — che chiudono matematicamente la corsa al titolo. Scende a zero alla conquista del campionato.</p>' +
+                  '<p class="rnd-mn-sub">Il Magic Number conta i punti combinati — fatti dalla Reggina o persi dalle squadre al secondo posto — che chiudono matematicamente la corsa al titolo. Scende a zero alla conquista del campionato.</p>' +
                   '</div>';
               }
             } else {
