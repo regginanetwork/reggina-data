@@ -18,16 +18,10 @@
 <!-- /wp:spacer -->
 
 <!-- wp:columns {"align":"wide","style":{"spacing":{"padding":{"top":"0vh","bottom":"0vh"},"margin":{"top":"0px","bottom":"0px"}}}} -->
-<div class="wp-block-columns alignwide" style="margin-top:0px;margin-bottom:0px;padding-top:0vh;padding-bottom:0vh"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
-<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Reggina Network è un progetto ideato da un gruppo di giovani tifosi della Reggina. L'idea è piuttosto semplice: condividere notizie, approfondimenti e dati su tutto quello che riguarda la squadra. Senza fare troppi giri di parole o usare "titoloni": ci interessa solo quello che serve davvero a capire cosa succede, dentro e fuori dal campo.</p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:column -->
-
-<!-- wp:column {"style":{"spacing":{"blockGap":"1em"}}} -->
-<div class="wp-block-column"><!-- wp:paragraph {"className":"rn-justify","style":{"typography":{"textTransform":"none"}},"fontSize":"tiny","fontFamily":"space-grotesk"} -->
-<p class="rn-justify has-space-grotesk-font-family has-tiny-font-size" style="text-transform:none">Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <span class="rn-wa-shimmer">canale WhatsApp</span>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
-<!-- /wp:paragraph --></div>
+<div class="wp-block-columns alignwide" style="margin-top:0px;margin-bottom:0px;padding-top:0vh;padding-bottom:0vh"><!-- wp:column {"width":"100%"} -->
+<div class="wp-block-column" style="flex-basis:100%"><!-- wp:html -->
+<p style="font-family:'Space Grotesk',sans-serif;font-size:var(--wp--preset--font-size--tiny);text-align:justify;text-transform:none;margin:0;">Reggina Network è un progetto ideato da un gruppo di giovani tifosi della Reggina. L'idea è piuttosto semplice: condividere notizie, approfondimenti e dati su tutto quello che riguarda la squadra. Senza fare troppi giri di parole o usare "titoloni": ci interessa solo quello che serve davvero a capire cosa succede, dentro e fuori dal campo. Per le notizie che hanno bisogno di essere condivise subito il nostro strumento principale è il <span class="rn-wa-shimmer">canale WhatsApp</span>: ci si iscrive cliccando <a href="https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J" target="_blank" rel="noreferrer noopener">qui</a>. Siamo anche su Instagram, <a href="https://www.instagram.com/regginanetwork/" target="_blank" rel="noreferrer noopener">qui</a>. Se vuoi sapere qualcosa di più su di noi, <a href="/chi-siamo/">siamo qui</a>.</p>
+<!-- /wp:html --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
@@ -163,7 +157,7 @@
 
     <a class="rn-sp-i" href="/classifica">
       <img src="https://www.regginanetwork.it/wp-content/uploads/2026/03/classifica.png" alt="Classifica">
-      <div class="rn-sp-c">Classifica</div>
+      <div class="rn-sp-c">Classifica e risultati</div>
     </a>
 
     <a class="rn-sp-i" href="/calendario">
