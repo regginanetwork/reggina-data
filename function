@@ -1620,11 +1620,12 @@ function reggina_classifica_shortcode() {
     .rngj-header { font-size: 13px; font-weight: 500; color: #666; margin-bottom: 0.85rem; }
     .rngj-match { display: flex; align-items: center; padding: 9px 12px; border-radius: 8px; border: 1px solid #f0f0f0; margin-bottom: 5px; background: #fff; }
     .rngj-match:hover { border-color: #e4e4e4; }
-    .rngj-team { flex: 1; display: flex; align-items: center; gap: 7px; min-width: 0; }
-    .rngj-team.rngj-away { flex-direction: row-reverse; }
+    .rngj-team { flex: 1; display: flex; align-items: center; justify-content: flex-start; gap: 7px; min-width: 0; }
+    .rngj-team.rngj-away { flex-direction: row-reverse; justify-content: flex-start; }
     .rngj-team img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
     .rngj-team-ph { width: 22px; height: 22px; flex-shrink: 0; display: inline-block; }
-    .rngj-name { font-size: 13px; font-weight: 400; color: #222; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rngj-name { flex: 0 1 auto; min-width: 0; font-size: 13px; font-weight: 400; color: #222; white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.15; overflow-wrap: break-word; }
+    .rngj-team.rngj-away .rngj-name { text-align: right; }
     .rngj-name.rngj-reggina { color: #8A1626; font-weight: 600; }
     .rngj-score { min-width: 50px; text-align: center; font-size: 14px; font-weight: 600; color: #111; font-variant-numeric: tabular-nums; flex-shrink: 0; }
     .rngj-score-wrap { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 50px; }
@@ -1695,6 +1696,7 @@ function reggina_classifica_shortcode() {
                     ospite: String(r['Squadra Ospite']     || '').trim(),
                     gc:     String(r['Gol Squadra Casa']   || '').trim(),
                     go:     String(r['Gol Squadra Ospite'] || '').trim(),
+                    data:   String(r['Data']               || '').trim(),
                     orario: String(r['Orario']             || '').trim()
                 });
             });
@@ -1779,7 +1781,42 @@ function reggina_classifica_shortcode() {
                 box.appendChild(msg);
                 return;
             }
-            header.textContent = current + '\u00aa giornata \u00b7 ' + g.data;
+            header.textContent = current + '\u00aa giornata';
+
+            function formatDataPartita(data) {
+                if (!data) return '';
+
+                var s = String(data).trim();
+                var match = s.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+
+                if (match) {
+                    return match[1].padStart(2, '0') + '/' +
+                           match[2].padStart(2, '0') + '/' +
+                           match[3];
+                }
+
+                // Gestisce anche valori tipo "domenica 27 settembre 2026".
+                var mesi = {
+                    gennaio:'01', febbraio:'02', marzo:'03', aprile:'04', maggio:'05', giugno:'06',
+                    luglio:'07', agosto:'08', settembre:'09', ottobre:'10', novembre:'11', dicembre:'12'
+                };
+                var testuale = s.toLowerCase().match(/(\d{1,2})\s+(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)\s+(\d{4})/);
+
+                if (testuale) {
+                    return testuale[1].padStart(2, '0') + '/' + mesi[testuale[2]] + '/' + testuale[3];
+                }
+
+                return s;
+            }
+
+            function formatOrario(orario) {
+                if (!orario) return '';
+                var s = String(orario).trim();
+                var match = s.match(/^(\d{1,2}):(\d{2})$/);
+                if (match) return match[1].padStart(2, '0') + ':' + match[2];
+                return s;
+            }
+
             g.partite.forEach(function(m) {
                 var rC = m.casa.toLowerCase().indexOf('reggina') > -1;
                 var rO = m.ospite.toLowerCase().indexOf('reggina') > -1;
@@ -1789,8 +1826,20 @@ function reggina_classifica_shortcode() {
                 var scoreHtml = haRisultato
                     ? m.gc + '\u2013' + m.go
                     : '\u2013';
-             var orarioHtml = m.orario
-                    ? '<span class="rngj-orario">⌚ ' + m.orario + '</span>'
+                var dataPartita = formatDataPartita(m.data);
+                var oraPartita = formatOrario(m.orario);
+                var dataOra = '';
+
+                if (dataPartita && oraPartita) {
+                    dataOra = dataPartita + ', ' + oraPartita;
+                } else if (dataPartita) {
+                    dataOra = dataPartita;
+                } else if (oraPartita) {
+                    dataOra = oraPartita;
+                }
+
+                var orarioHtml = dataOra
+                    ? '<span class="rngj-orario">' + dataOra + '</span>'
                     : '';
                 row.innerHTML =
                     '<div class="rngj-team">' + logoHtml(m.casa) +
