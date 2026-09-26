@@ -298,6 +298,10 @@ function reggina_dashboard_shortcode() {
     .rnd-tabs-wrap{margin-bottom:20px}
     .rnd-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 4px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
     .rnd-tabs-dots{display:none}
+    .rnd-mn-section{background:#fafafa;border:1px solid #f0f0f0;border-radius:12px;padding:16px}
+    .rnd-kpi-mn .rnd-mn-num{font-size:2.4rem;font-weight:700;color:#8B0000;line-height:1}
+    .rnd-mn-note{margin:12px 0 4px;font-size:13.5px;color:#333;line-height:1.6}
+    .rnd-mn-sub{margin:4px 0 0;font-size:12px;color:#999;line-height:1.55}
     .rnd-tabs::-webkit-scrollbar{display:none}
     .rnd-tab{flex-shrink:0;padding:9px 15px;font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600;color:#B0A9A4;border:none;background:none;border-radius:10px;cursor:pointer;white-space:nowrap;transition:all .15s}
     .rnd-tab.active{background:#fff;color:#8B0000;box-shadow:0 3px 10px rgba(139,0,0,.12),0 1px 2px rgba(0,0,0,.06)}
@@ -559,7 +563,7 @@ function reggina_dashboard_shortcode() {
       const RO=['portiere','difensore','centrocampista','attaccante'];
       const COMP_LABEL={campionato:'campionato','coppa italia':'Coppa Italia'};
 
-      let rosaData=[], calData=[], detData=[];
+      let rosaData=[], calData=[], detData=[], clasData=[];
       let selezionate=new Set(['campionato']);
       let currentView='g';
       let allP=[], matches=[], fasce=[], curF='tutti', curS='', minDone=false, pagDone=false, gaDone=false, ccDone=false, squadraDone=false;
@@ -592,8 +596,9 @@ function reggina_dashboard_shortcode() {
         fetch(BASE+'rosa-anagrafica.json?t='+t).then(r=>r.json()),
         fetch(BASE+'calendario.json?t='+t).then(r=>r.json()),
         fetch(BASE+'minuti-gol.json?t='+t).then(r=>r.json()),
-      ]).then(([rosa,cal,det])=>{
-        rosaData=rosa; calData=cal; detData=det;
+        fetch('<?php echo rest_url('rn/v1/data/classifica'); ?>?t='+t).then(r=>r.json()).catch(()=>[]),
+      ]).then(([rosa,cal,det,clas])=>{
+        rosaData=rosa; calData=cal; detData=det; clasData=Array.isArray(clas)?clas:[];
         ricalcola();
       }).catch(e=>{
         document.getElementById('rnd-grid').innerHTML='<div class="rnd-loading">Errore nel caricamento dei dati.</div>';
@@ -1134,6 +1139,129 @@ function reggina_dashboard_shortcode() {
         // essendo a eliminazione diretta in Serie D, non assegna punti.
         const soloCampionato = selezionate.size===1 && selezionate.has('campionato');
 
+        /* ---------- MAGIC NUMBER ----------
+           Calcolato solo quando la vista è limitata al campionato e la
+           classifica è disponibile. Logica:
+           - Partite totali del girone: 34 (18 squadre, andata e ritorno).
+           - Partite rimanenti di una squadra = 34 − partite_giocate.
+           - Massimo raggiungibile = punti_attuali + 3 × partite_rimanenti.
+           - Se la Reggina è prima: Magic Number = max_raggiungibile_2ª −
+             punti_Reggina + 1. Scende a zero quando il titolo è chiuso.
+           - Se non è prima: punti da recuperare sul 1° e max raggiungibile
+             dalla Reggina rispetto al 1°. */
+        let magicNumberHtml = '';
+        const TOT_GIORNATE = 34;
+        if (soloCampionato && clasData.length > 0) {
+          // Normalizza: chiave "squadra" e "punti" e "PG" (partite giocate).
+          // Le chiavi del JSON sono quelle del tuo Google Sheet — le più comuni
+          // sono "squadra"/"Squadra", "punti"/"Punti", "PG".
+          function clasVal(r, ...keys) {
+            for (const k of keys) {
+              if (r[k] !== undefined && r[k] !== '') return r[k];
+            }
+            return null;
+          }
+          const clasNorm = clasData.map(r => ({
+            squadra: String(clasVal(r,'squadra','Squadra','SQUADRA')||'').trim(),
+            punti:   parseInt(clasVal(r,'punti','Punti','PTS','Pts')||0, 10),
+            pg:      parseInt(clasVal(r,'partite giocate','Partite Giocate','PG','pg')||0, 10),
+          })).filter(r => r.squadra);
+
+          const reggina = clasNorm.find(r => r.squadra.toLowerCase().includes('reggina'));
+          if (reggina) {
+            const sorted = [...clasNorm].sort((a,b) => b.punti - a.punti);
+            const posReggina = sorted.findIndex(r => r.squadra.toLowerCase().includes('reggina')) + 1;
+            const ptR  = reggina.punti;
+            const pgR  = reggina.pg;
+            const rimR = TOT_GIORNATE - pgR;
+            const maxR = ptR + 3 * rimR;
+
+            let mnHtml = '';
+            if (posReggina === 1) {
+              // La Reggina è in testa: calcola il MN rispetto al secondo
+              const seconda = sorted[1];
+              if (seconda) {
+                const ptS  = seconda.punti;
+                const pgS  = seconda.pg;
+                const rimS = TOT_GIORNATE - pgS;
+                const maxS = ptS + 3 * rimS;
+                const mn   = Math.max(0, maxS - ptR + 1);
+                const vantaggio = ptR - ptS;
+
+                // Avversarie ancora matematicamente in corsa
+                const inCorsa = clasNorm.filter(r =>
+                  !r.squadra.toLowerCase().includes('reggina') &&
+                  (r.punti + 3*(TOT_GIORNATE - r.pg)) >= ptR
+                ).length;
+
+                let testoMN = '';
+                if (mn === 0) {
+                  testoMN = 'La Reggina ha vinto matematicamente il campionato.';
+                } else {
+                  testoMN = 'Servono ancora ' + mn + ' punt' + (mn===1?'o':'i') +
+                    ' combinati — fatti dalla Reggina o persi da ' + seconda.squadra +
+                    ' — per chiudere matematicamente la corsa al titolo.';
+                }
+
+                mnHtml =
+                  '<div class="rnd-vs-section rnd-mn-section">' +
+                  '<div class="rnd-stitle-main">Corsa al titolo</div>' +
+                  '<div class="rnd-kpi-row">' +
+                  '<div class="rnd-kpi"><span class="rnd-kv" style="color:#1a7a3a">1°</span><span class="rnd-kl">Posizione attuale</span></div>' +
+                  '<div class="rnd-kpi"><span class="rnd-kv" style="color:#1a7a3a">+' + vantaggio + '</span><span class="rnd-kl">Vantaggio sul 2°</span></div>' +
+                  '<div class="rnd-kpi rnd-kpi-mn"><span class="rnd-kv rnd-mn-num">' + mn + '</span><span class="rnd-kl">Magic Number</span></div>' +
+                  '<div class="rnd-kpi"><span class="rnd-kv">' + inCorsa + '</span><span class="rnd-kl">Squadre in corsa</span></div>' +
+                  '</div>' +
+                  '<p class="rnd-mn-note">' + testoMN + '</p>' +
+                  '<p class="rnd-mn-sub">Il Magic Number conta i punti combinati — fatti dalla Reggina o persi dalla seconda — che chiudono matematicamente la corsa al titolo. Scende a zero alla conquista del campionato.</p>' +
+                  '</div>';
+              }
+            } else {
+              // La Reggina non è prima
+              const prima = sorted[0];
+              const ptP   = prima.punti;
+              const pgP   = prima.pg;
+              const rimP  = TOT_GIORNATE - pgP;
+              const maxP  = ptP + 3 * rimP;
+              const gap   = ptP - ptR;
+
+              // Ancora possibile matematicamente?
+              const possibile = maxR >= ptP; // se il max della Reggina supera i punti attuali del primo
+
+              // Avversarie ancora in corsa (inclusa la prima)
+              const inCorsa = clasNorm.filter(r =>
+                !r.squadra.toLowerCase().includes('reggina') &&
+                (r.punti + 3*(TOT_GIORNATE - r.pg)) >= ptR
+              ).length;
+
+              let testoMN = '';
+              if (!possibile) {
+                testoMN = 'La Reggina non può più raggiungere ' + prima.squadra +
+                  ' matematicamente: il massimo raggiungibile è ' + maxR + ' punti, ' +
+                  'contro gli attuali ' + ptP + ' di ' + prima.squadra + '.';
+              } else {
+                testoMN = 'La Reggina ha ' + gap + ' punt' + (gap===1?'o':'i') +
+                  ' da recuperare su ' + prima.squadra + '. Con ' + rimR + ' partite rimanenti può raggiungere al massimo ' + maxR + ' punti.';
+              }
+
+              const coloreGap = possibile ? '#8B0000' : '#999';
+
+              mnHtml =
+                '<div class="rnd-vs-section rnd-mn-section">' +
+                '<div class="rnd-stitle-main">Corsa al titolo</div>' +
+                '<div class="rnd-kpi-row">' +
+                '<div class="rnd-kpi"><span class="rnd-kv">' + posReggina + '°</span><span class="rnd-kl">Posizione attuale</span></div>' +
+                '<div class="rnd-kpi"><span class="rnd-kv" style="color:' + coloreGap + '">−' + gap + '</span><span class="rnd-kl">Gap dalla vetta</span></div>' +
+                '<div class="rnd-kpi"><span class="rnd-kv">' + maxR + '</span><span class="rnd-kl">Max punti raggiungibili</span></div>' +
+                '<div class="rnd-kpi"><span class="rnd-kv">' + inCorsa + '</span><span class="rnd-kl">Squadre davanti</span></div>' +
+                '</div>' +
+                '<p class="rnd-mn-note">' + testoMN + '</p>' +
+                '</div>';
+            }
+            magicNumberHtml = mnHtml;
+          }
+        }
+
         let mediaPuntiHtml='', distaccoHtml='', lab=[], dS=[], dM=[], dD=[], dP=[];
         if(soloCampionato){
           let tp=0,pc=0,pt=0,nc=0,nt=0,n=0; const seq=[];
@@ -1188,6 +1316,7 @@ function reggina_dashboard_shortcode() {
         const spBarW=casaSp.length>8?casaSp.length*78:null;
 
         document.getElementById('rnd-vs').innerHTML=
+          magicNumberHtml+
           mediaPuntiHtml+
 
           '<div class="rnd-vs-section"><div class="rnd-stitle-main">Gol</div>'+
