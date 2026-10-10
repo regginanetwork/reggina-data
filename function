@@ -364,7 +364,7 @@ function reggina_dashboard_shortcode() {
     .rnd-card-num{font-size:20px;font-weight:700;color:#111}
     .rnd-stitle{font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#bbb;margin:14px 0 8px}
     .rnd-stitle-main{font-size:16px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#111;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #111}
-    .rnd-bars{display:flex;gap:6px;align-items:flex-end;overflow-x:auto;padding-bottom:8px;min-height:90px}
+    .rnd-bars{display:flex;gap:6px;align-items:flex-end;overflow-x:auto;padding-top:32px;padding-bottom:8px;min-height:90px}
     .rnd-bar{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:36px}
     .rnd-bar-fill{width:24px;border-radius:3px 3px 0 0;min-height:2px}
     .rnd-bar-empty{background:repeating-linear-gradient(45deg,#f0f0f0,#f0f0f0 2px,#fafafa 2px,#fafafa 4px)!important;border:0.5px dashed #e0e0e0}
@@ -373,7 +373,7 @@ function reggina_dashboard_shortcode() {
     .rnd-bar-g{font-size:11px;color:#bbb}
     .rnd-vs-section{margin-bottom:28px;padding-bottom:28px;border-bottom:0.5px solid #f0f0f0}
     .rnd-vs-section:last-child{border-bottom:none;padding-bottom:0}
-    .rnd-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px;margin-bottom:16px}
+    .rnd-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
     .rnd-legend{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
     .rnd-cl{display:flex;align-items:center;gap:6px;font-size:12px;color:#666}
     .rnd-cl-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0}
@@ -427,7 +427,11 @@ function reggina_dashboard_shortcode() {
       border:5px solid transparent;border-top-color:#1A0A0A;
       opacity:0;pointer-events:none;transition:opacity .12s;
     }
-    .ha-tip:hover::after,.ha-tip:hover::before{opacity:1}
+    .ha-tip:hover::after,.ha-tip:hover::before,
+    .ha-tip.ha-on::after,.ha-tip.ha-on::before{opacity:1}
+    /* Scheda giocatore: la prima e l'ultima barra allineano il tooltip al bordo, per non farlo tagliare */
+    .rnd-bar.ha-tip:first-child::after{left:0;transform:none}
+    .rnd-bar.ha-tip:last-child::after{left:auto;right:0;transform:none}
     .dv-tbl thead .dv-fill{background:#FAFAF9}
     .hm-tot{padding:10px 8px !important;text-align:right;min-width:56px;width:56px;background:#FAFAF9;
       position:sticky;left:110px;z-index:2;border-right:1px solid #F0ECE9}
@@ -440,6 +444,20 @@ function reggina_dashboard_shortcode() {
     .pg-med-l{font-size:9px;color:#B0A9A4;letter-spacing:.03em;text-transform:uppercase;margin-top:2px;white-space:nowrap}
     .pg-tbl thead .pg-med{left:104px}
     .pg-bars{padding:8px 12px !important}
+    /* Pagelle: l'intestazione sta fuori dall'area che scorre, quindi non si muove mai.
+       Le larghezze (104 + 60) devono coincidere con quelle delle colonne fisse della tabella. */
+    .pg-head{display:flex;background:#FAFAF9;border-bottom:1px solid #F5F2F0}
+    .pg-head>div{box-sizing:border-box;padding:10px 4px;font-size:10px;font-weight:700;letter-spacing:.06em;
+      text-transform:uppercase;color:#B0A9A4;white-space:nowrap}
+    .pg-head-nm{flex:none;width:104px;padding:10px !important;text-align:left;border-right:1px solid #F0ECE9}
+    .pg-head-med{flex:none;width:60px;padding:10px 8px !important;text-align:center;border-right:1px solid #F0ECE9}
+    .pg-head-lbl{flex:1;text-align:left;padding-left:12px !important}
+    .pg-tbl .dv-nm,.pg-tbl .pg-med{box-sizing:border-box}
+    /* Scorrimento più morbido delle barre */
+    .pg-scroll{scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+    .pg-tbl .dv-nm,.pg-tbl .pg-med{will-change:transform}
+    /* Spazio sopra la prima riga, perché il tooltip delle barre più alte non venga tagliato */
+    .pg-tbl tbody tr:first-child .pg-bars{padding-top:16px !important}
     .pg-v-top{font-size:9px;font-weight:700;color:#7A6B68;text-align:center;margin-bottom:2px;line-height:1;height:12px}
     .pg-bar-wrap{display:flex;flex-direction:column;align-items:center;width:20px}
     .pg-b{width:20px;border-radius:3px 3px 0 0;flex-shrink:0}
@@ -465,6 +483,9 @@ function reggina_dashboard_shortcode() {
       .hm-c{width:24px;height:24px;line-height:24px;font-size:9px}
       .hm-td{width:28px}
       .ga-kpi-row{grid-template-columns:repeat(2,1fr)}
+      .rnd-kpi-row .rnd-kv{font-size:18px}
+      .rnd-kpi-row .rnd-kl{font-size:10px}
+      .rnd-kpi-row{gap:4px}
       .rnd-tabs-dots{
         display:flex;gap:5px;justify-content:center;margin:-12px 0 16px;
       }
@@ -807,18 +828,23 @@ function reggina_dashboard_shortcode() {
         const ip=p.ruolo==='portiere';
         const gi=Object.entries(p.giornate).sort((a,b)=>a[1].idx-b[1].idx);
 
+        // Nome dell'avversario per ogni partita, da mostrare nel tooltip.
+        const avvMap={};
+        matches.forEach(m=>{ avvMap[m._key]=(m.avversario||'').trim(); });
+        const tip=k=>avvMap[k]?' ha-tip" data-tip="'+avvMap[k]:'';
+
         const minBars=gi.map(function(e){const g=e[1], lbl=labelPartita(g.comp,g.num,'G');
-          if(g.min===0)return '<div class="rnd-bar"><div class="rnd-bar-m">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
+          if(g.min===0)return '<div class="rnd-bar'+tip(e[0])+'"><div class="rnd-bar-m">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
           const h=Math.max(4,Math.round((g.min/90)*70));
           const c=g.min>=80?'#1a7a3a':g.min>=50?'#5cb85c':g.min>=20?'#a5d6a7':'#e0e0e0';
-          return '<div class="rnd-bar"><div class="rnd-bar-m">'+g.min+"'"+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
+          return '<div class="rnd-bar'+tip(e[0])+'"><div class="rnd-bar-m">'+g.min+"'"+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
         }).join('');
 
         const votoBars=gi.map(function(e){const g=e[1], lbl=labelPartita(g.comp,g.num,'G');
-          if(g.voto===null)return '<div class="rnd-bar"><div class="rnd-bar-v">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
+          if(g.voto===null)return '<div class="rnd-bar'+tip(e[0])+'"><div class="rnd-bar-v">&nbsp;</div><div class="rnd-bar-fill rnd-bar-empty" style="height:4px"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
           const h=Math.max(4,(g.voto-3)*24);
           const c=g.voto>=6.5?'#1a7a3a':g.voto>=6?'#5cb85c':g.voto>=5.5?'#FFD54F':'#e57373';
-          return '<div class="rnd-bar"><div class="rnd-bar-v">'+g.voto.toFixed(1).replace('.',',')+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
+          return '<div class="rnd-bar'+tip(e[0])+'"><div class="rnd-bar-v">'+g.voto.toFixed(1).replace('.',',')+'</div><div class="rnd-bar-fill" style="height:'+h+'px;background:'+c+'"></div><div class="rnd-bar-g">'+lbl+'</div></div>';
         }).join('');
 
         const mv=p.mediaVoto;
@@ -849,6 +875,14 @@ function reggina_dashboard_shortcode() {
               '<div class="rnd-empty-b">Minutaggi e pagelle compariranno qui dopo la prima partita.</div></div>')+
           '</div>';
       }
+
+      /* Su dispositivi touch (senza hover) un tocco mostra l'etichetta, un secondo tocco la nasconde */
+      document.addEventListener('click',function(e){
+        if(!window.matchMedia('(hover:none)').matches)return;
+        const t=e.target.closest('.ha-tip');
+        document.querySelectorAll('.ha-tip.ha-on').forEach(function(x){ if(x!==t)x.classList.remove('ha-on'); });
+        if(t)t.classList.toggle('ha-on');
+      });
 
       window.rndOpen=function(id){
         const p=allP[id]; if(!p)return;
@@ -943,11 +977,9 @@ function reggina_dashboard_shortcode() {
         matches.forEach(m=>{ avvMap[m._key]=(m.avversario||'').trim(); });
 
         let h='<p class="dv-note">Ordinati per media voto ponderata sui minuti giocati: chi gioca di più pesa di più.</p>'+
-          '<div class="dv-wrap"><div class="dv-scroll"><table class="dv-tbl pg-tbl"><thead><tr>'+
-          '<th class="dv-nm dv-hd" style="text-align:left">Giocatore</th>'+
-          '<th class="pg-med dv-hd">Media</th>'+
-          '<th class="dv-hd" style="text-align:left;padding-left:12px !important">Voto per giornata</th>'+
-          '</tr></thead><tbody>';
+          '<div class="dv-wrap">'+
+          '<div class="pg-head"><div class="pg-head-nm">Giocatore</div><div class="pg-head-med">Media</div><div class="pg-head-lbl">Voto per giornata</div></div>'+
+          '<div class="dv-scroll pg-scroll"><table class="dv-tbl pg-tbl"><tbody>';
 
         sorted.forEach(p=>{
           const mv=p.mediaVoto;
@@ -1212,7 +1244,7 @@ function reggina_dashboard_shortcode() {
                   '<div class="rnd-stitle-main">Corsa al titolo</div>' +
                   '<div class="rnd-kpi-row">' +
                   '<div class="rnd-kpi"><span class="rnd-kv" style="color:#1a7a3a">1°</span><span class="rnd-kl">Posizione attuale</span></div>' +
-                  '<div class="rnd-kpi"><span class="rnd-kv" style="color:#1a7a3a">+' + vantaggio + '</span><span class="rnd-kl">Vantaggio sul 2°</span></div>' +
+                  '<div class="rnd-kpi"><span class="rnd-kv" style="color:#1a7a3a">+' + vantaggio + ' pt</span><span class="rnd-kl">Vantaggio sul 2°</span></div>' +
                   '<div class="rnd-kpi rnd-kpi-mn"><span class="rnd-kv rnd-mn-num">' + mn + '</span><span class="rnd-kl">Magic Number</span></div>' +
                   '<div class="rnd-kpi"><span class="rnd-kv">' + inCorsa + '</span><span class="rnd-kl">Squadre in corsa</span></div>' +
                   '</div>' +
@@ -1305,6 +1337,14 @@ function reggina_dashboard_shortcode() {
         const totGF=gfA.reduce((s,v)=>s+v,0),totGS=gsA.reduce((s,v)=>s+v,0);
         const totCS=matches.filter(r=>num(r['GS'])===0).length;
         const saldo=totGF-totGS;
+        const matchesCasa=matches.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')>-1);
+        const matchesTrasf=matches.filter(r=>(r['H/A']||'').toLowerCase().indexOf('casa')===-1);
+        const mediaGFGen=matches.length>0?(totGF/matches.length).toFixed(2).replace('.',','):'—';
+        const mediaGSGen=matches.length>0?(totGS/matches.length).toFixed(2).replace('.',','):'—';
+        const gfCasaTot=matchesCasa.reduce((s,r)=>s+num(r['GF']),0);
+        const gfTrasfTot=matchesTrasf.reduce((s,r)=>s+num(r['GF']),0);
+        const mediaGFCasa=matchesCasa.length>0?(gfCasaTot/matchesCasa.length).toFixed(2).replace('.',','):'—';
+        const mediaGFTrasf=matchesTrasf.length>0?(gfTrasfTot/matchesTrasf.length).toFixed(2).replace('.',','):'—';
         const labG=matches.map(r=>labelPartita(r._comp,r._numCampionato,'G'));
         const barW=matches.length>10?matches.length*58:null;
         const legGol='<div class="rnd-legend"><div class="rnd-cl"><div class="rnd-cl-dot" style="background:#1a7a3a"></div>Gol fatti</div><div class="rnd-cl"><div class="rnd-cl-dot" style="background:#8B0000"></div>Gol subiti</div></div>';
@@ -1329,6 +1369,11 @@ function reggina_dashboard_shortcode() {
           '<div class="rnd-kpi"><span class="rnd-kv r">'+fmt(totGS)+'</span><span class="rnd-kl">Gol subiti</span></div>'+
           '<div class="rnd-kpi"><span class="rnd-kv '+(saldo>=0?'g':'r')+'">'+(saldo>0?'+':'')+fmt(saldo)+'</span><span class="rnd-kl">Saldo</span></div>'+
           '<div class="rnd-kpi"><span class="rnd-kv g">'+fmt(totCS)+'</span><span class="rnd-kl">Clean sheet</span></div></div>'+
+          '<div class="rnd-kpi-row">'+
+          '<div class="rnd-kpi"><span class="rnd-kv g">'+mediaGFGen+'</span><span class="rnd-kl">Media gol fatti</span></div>'+
+          '<div class="rnd-kpi"><span class="rnd-kv r">'+mediaGSGen+'</span><span class="rnd-kl">Media gol subiti</span></div>'+
+          '<div class="rnd-kpi"><span class="rnd-kv g">'+mediaGFCasa+'</span><span class="rnd-kl">Media gol fatti casa</span></div>'+
+          '<div class="rnd-kpi"><span class="rnd-kv g">'+mediaGFTrasf+'</span><span class="rnd-kl">Media gol fatti trasf.</span></div></div>'+
           '<div class="rnd-stitle">Per giornata</div>'+legGol+
           '<div class="rnd-cscroll"><div class="rnd-cinner" id="rnd-ci3"><canvas id="rnd-c3"></canvas></div></div>'+
           '<div class="rnd-stitle">Per intervalli di tempo</div>'+legGol+
@@ -2105,7 +2150,7 @@ function reggina_lista_post( $atts ) {
 
     <?php if ( $a['link'] ) : ?>
         <a class="rn-posts-all" href="<?php echo esc_url( $a['link'] ); ?>">
-            Tutti gli articoli <span class="rn-posts-arr">→</span>
+            Tutti i post <span class="rn-posts-arr">→</span>
         </a>
     <?php endif; ?>
 
