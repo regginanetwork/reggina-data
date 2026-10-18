@@ -198,16 +198,16 @@
   "H/A": "trasferta",
   "GF 1t": "2",
   "GS 1t": "1",
-  "GF 2t": "",
-  "GS 2t": "",
+  "GF 2t": "0",
+  "GS 2t": "0",
   "GF": "2",
   "GS": "1",
-  "V/S/P": "",
-  "punti": "",
+  "V/S/P": "V",
+  "punti": "3",
   "allenatore": "Marchionni",
-  "distacco dalla vetta": "",
+  "distacco dalla vetta": "0",
   "spettatori": "",
-  "posizione in classifica": ""
+  "posizione in classifica": "1"
  },
  {
   "# partita": "11",
