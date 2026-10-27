@@ -778,5 +778,18 @@
   "scadenza contratto": "30/06/2027",
   "in rosa": "sì",
   "transfermarkt": "https://www.transfermarkt.it/andrea-magrassi/profil/spieler/175788"
+ },
+ {
+  "numero maglia": "",
+  "nome": "Luca",
+  "cognome": "Bruno",
+  "ruolo": "difensore",
+  "under/over": "over",
+  "data di nascita": "24/08/1996",
+  "età": "30,2",
+  "tipologia contratto": "acquisto definitivo",
+  "scadenza contratto": "30/06/2027",
+  "in rosa": "",
+  "transfermarkt": "https://www.transfermarkt.it/luca-bruno/profil/spieler/285091"
  }
 ]
