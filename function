@@ -2864,6 +2864,161 @@ function reggina_header_compatto() {
 add_action( 'wp_body_open', 'reggina_header_compatto', 5 );
 
 /*	-----------------------------------------------------------------------------------------------
+	BANNER CANALE WHATSAPP — sotto il menu, in tutte le pagine e in tutti gli articoli
+	Viene stampato subito dopo l'header (priorità 6, l'header è a 5).
+	Chi clicca viene segnato come iscritto: sugli articoli non rivede il popup.
+--------------------------------------------------------------------------------------------------- */
+
+function reggina_banner_whatsapp() {
+    $wa = 'https://whatsapp.com/channel/0029VaWp5N3GehEKLu4xvR0J';
+    ?>
+    <div class="rn-wab-wrap">
+      <a class="rn-wab" id="rn-wab" href="<?php echo esc_url( $wa ); ?>" target="_blank" rel="noopener noreferrer">
+        <span class="rn-wab-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.556 4.121 1.527 5.855L.057 23.882l6.196-1.624A11.935 11.935 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.003-1.369l-.36-.213-3.68.964.983-3.594-.234-.37A9.818 9.818 0 1112 21.818z"/></svg>
+        </span>
+        <span class="rn-wab-body">
+          <span class="rn-wab-t">La <span class="rn-wa-shimmer">community</span> di <span class="rn-wab-nw">Reggina Network</span> è su WhatsApp</span>
+          <span class="rn-wab-s">Le notizie sulla Reggina, spiegate. Senza fretta e senza urlare.</span>
+        </span>
+        <span class="rn-wab-c"><span class="rn-wab-c-t">Iscriviti</span><span class="rn-wab-c-s">gratis</span></span>
+      </a>
+    </div>
+
+    <style>
+    /* Il banner sta fuori dal contenitore dei contenuti: il margine laterale
+       lo diamo noi, così su mobile non tocca i bordi dello schermo. */
+    .rn-wab-wrap {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 1160px;
+      margin: 22px auto 0;
+      padding: 0 40px;
+    }
+    .rn-wab {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 16px 18px 16px 16px;
+      background: #EEF9F2;
+      border-radius: 16px;
+      text-decoration: none !important;
+      color: inherit;
+      font-family: 'Space Grotesk', sans-serif;
+      box-sizing: border-box;
+      position: relative;
+      transition: background .15s;
+    }
+    .rn-wab *, .rn-wab *::before, .rn-wab *::after { box-sizing: border-box; }
+
+    /* Luce che scorre lungo il bordo: stessa tecnica del riquadro
+       DatAmaranto in homepage, con i verdi di WhatsApp. */
+    @property --rn-wab-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    .rn-wab::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px;
+      border: 1px solid #D3EEDC;
+      pointer-events: none;
+      transition: border-color .2s;
+    }
+    .rn-wab:hover::after { border-color: #25D366; }
+    .rn-wab::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px;
+      padding: 2px;
+      background: conic-gradient(from var(--rn-wab-angle),
+        transparent 0%,
+        transparent 82%,
+        #1a9e4e 88%,
+        #7ee8a8 92%,
+        #1a9e4e 96%,
+        transparent 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: rn-wab-border-spin 4s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @keyframes rn-wab-border-spin {
+      to { --rn-wab-angle: 360deg; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rn-wab::before { animation: none; }
+    }
+    .rn-wab:hover { background: #E4F5EA; }
+    .rn-wab-ico {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: #25D366;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .rn-wab-ico svg { width: 24px; height: 24px; fill: #fff; display: block; }
+    .rn-wab-body { flex: 1; min-width: 0; }
+    .rn-wab-t {
+      display: block;
+      font-size: 18px; font-weight: 700; color: #111;
+      line-height: 1.25; letter-spacing: -.02em;
+    }
+    .rn-wab-s {
+      display: block;
+      font-size: 13.5px; color: #6B6360; line-height: 1.5;
+      margin-top: 3px;
+    }
+    /* "Reggina Network" non deve mai andare a capo a metà */
+    .rn-wab-nw { white-space: nowrap; }
+    .rn-wab-c {
+      flex-shrink: 0;
+      display: flex; flex-direction: column; align-items: center;
+      background: #25D366; color: #fff;
+      padding: 9px 24px 8px; border-radius: 999px;
+      line-height: 1.1;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .rn-wab-c-t { display: block; font-size: 16.5px; font-weight: 700; }
+    .rn-wab-c-s { display: block; font-size: 10.5px; font-weight: 500; color: rgba(255,255,255,.82); margin-top: 2px; }
+    .rn-wab:hover .rn-wab-c { background: #1DA851; }
+
+    @media (max-width: 600px) {
+      .rn-wab-wrap { margin-top: 16px; padding: 0 30px; }
+      .rn-wab {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 14px;
+      }
+      .rn-wab-ico { width: 38px; height: 38px; }
+      .rn-wab-ico svg { width: 21px; height: 21px; }
+      .rn-wab-body { flex: 1 1 calc(100% - 50px); }
+      .rn-wab-t { font-size: 16px; }
+      .rn-wab-s { font-size: 12.5px; }
+      .rn-wab-c { flex: 1 1 100%; text-align: center; padding: 10px 20px 9px; }
+    }
+    </style>
+
+    <script>
+    (function(){
+      var b = document.getElementById('rn-wab');
+      if (!b) return;
+      b.addEventListener('click', function(){
+        try { localStorage.setItem('rn_wa_iscritto', '1'); } catch(e) {}
+      });
+    })();
+    </script>
+    <?php
+}
+add_action( 'wp_body_open', 'reggina_banner_whatsapp', 6 );
+
+/*	-----------------------------------------------------------------------------------------------
 	SPAZIO IN CIMA — il tema mette un padding sul contenitore principale
 	che serviva al suo header, ormai sostituito dal nostro.
 --------------------------------------------------------------------------------------------------- */
